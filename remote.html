@@ -8,39 +8,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#040b17">
     <style>
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            max-height: 100dvh;
+            overflow: hidden !important;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: auto;
+        }
         body {
             background-color: #040b17;
             background-image: radial-gradient(circle at 50% 20%, rgba(220, 38, 38, 0.22) 0%, transparent 60%);
             font-family: 'Plus Jakarta Sans', sans-serif;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .btn-ctrl:active {
             transform: scale(0.95);
         }
     </style>
 </head>
-<body class="text-white min-h-screen flex flex-col justify-between p-4 selection:bg-red-600">
+<body class="text-white h-screen h-[100dvh] max-h-[100dvh] overflow-hidden flex flex-col justify-between p-2.5 sm:p-4 selection:bg-red-600">
 
-    <!-- Header Status with Disconnect Button -->
-    <header class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div class="flex items-center gap-2.5">
-            <div id="iconStatus" class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm shadow-lg">
+    <!-- Header Status with Fullscreen & Disconnect Buttons -->
+    <header class="flex items-center justify-between border-b border-slate-800/80 pb-2 flex-shrink-0">
+        <div class="flex items-center gap-2">
+            <div id="iconStatus" class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-xs shadow-lg">
                 <i class="fa-solid fa-gamepad"></i>
             </div>
             <div>
-                <h1 class="text-xs font-black tracking-wider uppercase text-slate-100">BFRD Remote Clicker</h1>
-                <p id="statusTxt" class="text-[10px] text-amber-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span> Menyambung ke skrin komputer...
+                <h1 class="text-[11px] font-black tracking-wider uppercase text-slate-100">BFRD Remote</h1>
+                <p id="statusTxt" class="text-[9px] text-amber-400 font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block"></span> Menyambung...
                 </p>
             </div>
         </div>
 
-        <!-- Disconnect / Reconnect Button -->
-        <button id="btnDisconnect" onclick="handleDisconnectClick()" class="text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md">
-            <i id="btnDisconnectIcon" class="fa-solid fa-power-off text-[11px] text-red-400"></i>
-            <span id="btnDisconnectText">Putuskan (Disconnect)</span>
-        </button>
+        <!-- Actions: Fullscreen & Disconnect -->
+        <div class="flex items-center gap-1.5">
+            <button id="btnFullscreen" onclick="toggleFullscreen()" class="btn-ctrl text-xs font-bold px-2 py-1 rounded-xl border border-slate-700 bg-slate-800/90 hover:bg-slate-700 text-amber-300 transition-all flex items-center gap-1 shadow" title="Skrin Penuh (Fullscreen)">
+                <i id="iconFullscreen" class="fa-solid fa-expand text-[11px]"></i>
+                <span id="txtFullscreen" class="hidden sm:inline text-[10px]">Fullscreen</span>
+            </button>
+            <button id="btnDisconnect" onclick="handleDisconnectClick()" class="btn-ctrl text-xs font-bold px-2.5 py-1 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1 shadow">
+                <i id="btnDisconnectIcon" class="fa-solid fa-power-off text-[10px] text-red-400"></i>
+                <span id="btnDisconnectText" class="text-[10px]">Putuskan</span>
+            </button>
+        </div>
     </header>
 
     <!-- Manual Room ID Box (Fallback if URL query parameter was not passed) -->
@@ -55,123 +75,135 @@
     </div>
 
     <!-- Main Controller Pad -->
-    <main class="my-auto space-y-5 py-4">
+        <!-- Main Controller Pad (Compact, Zero-Scroll Architecture) -->
+    <main class="flex-1 flex flex-col justify-between py-1.5 gap-2 overflow-hidden">
         <!-- Big Navigation Buttons -->
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="sendCommand({action: 'prev'})" class="btn-ctrl bg-slate-800/90 active:bg-slate-700 border-2 border-slate-700 py-8 rounded-3xl flex flex-col items-center justify-center gap-2 shadow-xl">
-                <i class="fa-solid fa-chevron-left text-3xl text-amber-400"></i>
-                <span class="text-sm font-extrabold uppercase tracking-wider text-slate-200">Sebelumnya (Prev)</span>
+        <div class="grid grid-cols-2 gap-2.5 flex-shrink-0">
+            <button onclick="sendCommand({action: 'prev'})" class="btn-ctrl bg-slate-800/95 active:bg-slate-700 border-2 border-slate-700 py-3.5 sm:py-5 rounded-2xl flex items-center justify-center gap-2 shadow-lg">
+                <i class="fa-solid fa-chevron-left text-xl text-amber-400"></i>
+                <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-200">Sebelum (Prev)</span>
             </button>
-            <button onclick="sendCommand({action: 'next'})" class="btn-ctrl bg-gradient-to-br from-red-600 to-red-800 active:from-red-700 active:to-red-900 border-2 border-red-500/50 py-8 rounded-3xl flex flex-col items-center justify-center gap-2 shadow-2xl">
-                <i class="fa-solid fa-chevron-right text-3xl text-white"></i>
-                <span class="text-sm font-extrabold uppercase tracking-wider text-white">Seterusnya (Next)</span>
+            <button onclick="sendCommand({action: 'next'})" class="btn-ctrl bg-gradient-to-r from-red-600 to-red-800 active:from-red-700 active:to-red-900 border-2 border-red-500/50 py-3.5 sm:py-5 rounded-2xl flex items-center justify-center gap-2 shadow-xl">
+                <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white">Berikut (Next)</span>
+                <i class="fa-solid fa-chevron-right text-xl text-white"></i>
             </button>
         </div>
 
-        <!-- Language Switch on Screen -->
-        <div class="grid grid-cols-2 gap-3 bg-slate-900/80 p-2 rounded-2xl border border-slate-800">
-            <button id="btnLangMs" onclick="handleLangClick('ms')" class="btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-amber-500/20 text-amber-300 border-2 border-amber-400 shadow-md transition-all">
+        <!-- Language Switch -->
+        <div class="grid grid-cols-2 gap-2 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800 flex-shrink-0">
+            <button id="btnLangMs" onclick="handleLangClick('ms')" class="btn-ctrl py-1.5 rounded-lg font-bold text-xs bg-amber-500/20 text-amber-300 border-2 border-amber-400 shadow transition-all">
                 Bahasa Melayu
             </button>
-            <button id="btnLangEn" onclick="handleLangClick('en')" class="btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all">
+            <button id="btnLangEn" onclick="handleLangClick('en')" class="btn-ctrl py-1.5 rounded-lg font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all">
                 English
             </button>
         </div>
 
-        <!-- Direct 12 Modules Jumper (Completely Free of Emojis) -->
-        <div class="space-y-2">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lompat Ke Modul Tertentu:</div>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <button onclick="handleModuleClick(0)" data-slide="0" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">1. Visi & Misi</button>
-                <button onclick="handleModuleClick(1)" data-slide="1" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">2. Tugas & Tanggungjawab</button>
-                <button onclick="handleModuleClick(2)" data-slide="2" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">3. Perkhidmatan Khas</button>
-                <button onclick="handleModuleClick(3)" data-slide="3" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">4. Kerja Khas (Bukan Kecemasan)</button>
-                <button onclick="handleModuleClick(4)" data-slide="4" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">5. Tatacara Memohon</button>
-                <button onclick="handleModuleClick(5)" data-slide="5" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">6. Syarat Kelayakan Am</button>
-                <button onclick="handleModuleClick(6)" data-slide="6" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">7. Kelayakan Jawatan</button>
-                <button onclick="handleModuleClick(7)" data-slide="7" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">8. Syarat Kelayakan Fizikal</button>
-                <button onclick="handleModuleClick(8)" data-slide="8" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">9. Ujian Kecergasan (IPPT)</button>
-                <button onclick="handleModuleClick(9)" data-slide="9" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">10. Ujian Praktikal</button>
-                <button onclick="handleModuleClick(10)" data-slide="10" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">11. Kursus / Latihan</button>
-                <button onclick="handleModuleClick(11)" data-slide="11" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">12. Hubungi Kami</button>
+        <!-- Interactive Remote Tab Switcher -->
+        <div class="flex rounded-xl bg-slate-900/90 p-1 border border-slate-800 text-[11px] font-bold gap-1 flex-shrink-0">
+            <button id="tabBtnModules" onclick="switchRemoteTab('modules')" class="flex-1 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-all flex items-center justify-center gap-1.5 shadow">
+                <i class="fa-solid fa-list-ol text-[10px]"></i>
+                <span id="txtTabModules">12 Modul Slaid</span>
+            </button>
+            <button id="tabBtnRanks" onclick="switchRemoteTab('ranks')" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-ranking-star text-[10px]"></i>
+                <span id="txtTabRanks">Kelayakan Jawatan</span>
+            </button>
+        </div>
+
+        <!-- Tab Panel 1: Direct 12 Modules Jumper -->
+        <div id="panelModules" class="flex-1 overflow-y-auto pr-0.5 space-y-1">
+            <div class="grid grid-cols-2 gap-1.5 text-xs">
+                <button onclick="handleModuleClick(0)" data-slide="0" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">1. Visi & Misi</button>
+                <button onclick="handleModuleClick(1)" data-slide="1" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">2. Tugas & Tanggungjawab</button>
+                <button onclick="handleModuleClick(2)" data-slide="2" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">3. Perkhidmatan Khas</button>
+                <button onclick="handleModuleClick(3)" data-slide="3" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">4. Kerja Khas (Bukan Kecemasan)</button>
+                <button onclick="handleModuleClick(4)" data-slide="4" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">5. Tatacara Memohon</button>
+                <button onclick="handleModuleClick(5)" data-slide="5" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">6. Syarat Kelayakan Am</button>
+                <button onclick="handleModuleClick(6)" data-slide="6" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">7. Kelayakan Jawatan</button>
+                <button onclick="handleModuleClick(7)" data-slide="7" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">8. Syarat Kelayakan Fizikal</button>
+                <button onclick="handleModuleClick(8)" data-slide="8" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">9. Ujian Kecergasan (IPPT)</button>
+                <button onclick="handleModuleClick(9)" data-slide="9" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">10. Ujian Praktikal</button>
+                <button onclick="handleModuleClick(10)" data-slide="10" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">11. Kursus / Latihan</button>
+                <button onclick="handleModuleClick(11)" data-slide="11" class="btn-ctrl module-btn py-1.5 px-2 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate text-[11px]">12. Hubungi Kami</button>
             </div>
         </div>
-        <!-- Pangkat & Jawatan Quick Selector (Pop-up Perbesar) -->
-        <div id="rankSelectorCard" class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 transition-all space-y-2.5">
-            <div class="flex items-center justify-between">
+
+        <!-- Tab Panel 2: Kelayakan Jawatan Quick Selector (Pop-up Perbesar) -->
+        <div id="panelRanks" class="hidden flex-1 flex flex-col justify-between bg-slate-900/90 p-2.5 rounded-2xl border border-slate-800 transition-all gap-2 overflow-y-auto">
+            <div class="flex items-center justify-between flex-shrink-0">
                 <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                     <i class="fa-solid fa-ranking-star"></i>
                     <span id="txtRankHeader">Kelayakan Jawatan (Pop-up Perbesar):</span>
                 </div>
-                <button id="btnCloseRank" onclick="sendCommand({action: 'closeRank'})" class="hidden text-[10px] font-bold px-2.5 py-1 rounded-lg bg-red-950/80 border border-red-500/50 text-red-300 hover:bg-red-900 flex items-center gap-1 transition-all">
+                <button id="btnCloseRank" onclick="sendCommand({action: 'closeRank'})" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-lg bg-red-950/80 border border-red-500/50 text-red-300 hover:bg-red-900 flex items-center gap-1 transition-all">
                     <i class="fa-solid fa-xmark"></i>
                     <span id="txtCloseRank">Tutup Pop-up</span>
                 </button>
             </div>
 
             <!-- 6 Jawatan Buttons Grid -->
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <button onclick="handleRankClick(0)" data-rank="0" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+            <div class="grid grid-cols-2 gap-1.5 text-xs">
+                <button onclick="handleRankClick(0)" data-rank="0" class="btn-ctrl rank-btn p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
                     <div class="flex items-center justify-between w-full">
-                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi II</span>
-                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                        <span class="text-[9px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi II</span>
+                        <i class="fa-solid fa-expand text-[9px] text-slate-400"></i>
                     </div>
-                    <span class="truncate text-xs font-semibold rank-title">1. Penguasa Bomba & Penyelamat</span>
+                    <span class="truncate text-[11px] font-semibold rank-title">1. Penguasa Bomba & Penyelamat</span>
                 </button>
-                <button onclick="handleRankClick(1)" data-rank="1" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                <button onclick="handleRankClick(1)" data-rank="1" class="btn-ctrl rank-btn p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
                     <div class="flex items-center justify-between w-full">
-                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi III</span>
-                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                        <span class="text-[9px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi III</span>
+                        <i class="fa-solid fa-expand text-[9px] text-slate-400"></i>
                     </div>
-                    <span class="truncate text-xs font-semibold rank-title">2. Timbalan Penguasa Bomba</span>
+                    <span class="truncate text-[11px] font-semibold rank-title">2. Timbalan Penguasa Bomba</span>
                 </button>
-                <button onclick="handleRankClick(2)" data-rank="2" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                <button onclick="handleRankClick(2)" data-rank="2" class="btn-ctrl rank-btn p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
                     <div class="flex items-center justify-between w-full">
-                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi III</span>
-                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                        <span class="text-[9px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi III</span>
+                        <i class="fa-solid fa-expand text-[9px] text-slate-400"></i>
                     </div>
-                    <span class="truncate text-xs font-semibold rank-title">3. Penolong Penguasa Bomba</span>
+                    <span class="truncate text-[11px] font-semibold rank-title">3. Penolong Penguasa Bomba</span>
                 </button>
-                <button onclick="handleRankClick(3)" data-rank="3" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                <button onclick="handleRankClick(3)" data-rank="3" class="btn-ctrl rank-btn p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
                     <div class="flex items-center justify-between w-full">
-                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi IV</span>
-                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                        <span class="text-[9px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi IV</span>
+                        <i class="fa-solid fa-expand text-[9px] text-slate-400"></i>
                     </div>
-                    <span class="truncate text-xs font-semibold rank-title">4. Pegawai Balai</span>
+                    <span class="truncate text-[11px] font-semibold rank-title">4. Pegawai Balai</span>
                 </button>
-                <button onclick="handleRankClick(4)" data-rank="4" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                <button onclick="handleRankClick(4)" data-rank="4" class="btn-ctrl rank-btn p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
                     <div class="flex items-center justify-between w-full">
-                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi IV</span>
-                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                        <span class="text-[9px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi IV</span>
+                        <i class="fa-solid fa-expand text-[9px] text-slate-400"></i>
                     </div>
-                    <span class="truncate text-xs font-semibold rank-title">5. Timbalan Pegawai Balai</span>
+                    <span class="truncate text-[11px] font-semibold rank-title">5. Timbalan Pegawai Balai</span>
                 </button>
-                <button onclick="handleRankClick(5)" data-rank="5" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                <button onclick="handleRankClick(5)" data-rank="5" class="btn-ctrl rank-btn p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
                     <div class="flex items-center justify-between w-full">
-                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi V</span>
-                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                        <span class="text-[9px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi V</span>
+                        <i class="fa-solid fa-expand text-[9px] text-slate-400"></i>
                     </div>
-                    <span class="truncate text-xs font-semibold rank-title">6. Ahli Bomba</span>
+                    <span class="truncate text-[11px] font-semibold rank-title">6. Ahli Bomba</span>
                 </button>
             </div>
 
             <!-- Rank Sub Navigation Buttons -->
-            <div id="rankNavControls" class="grid grid-cols-3 gap-2 pt-1">
-                <button onclick="sendCommand({action: 'prevRank'})" class="btn-ctrl py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] border border-slate-700 flex items-center justify-center gap-1 shadow">
-                    <i class="fa-solid fa-chevron-left text-[10px]"></i>
+            <div id="rankNavControls" class="grid grid-cols-3 gap-1.5 pt-0.5 flex-shrink-0">
+                <button onclick="sendCommand({action: 'prevRank'})" class="btn-ctrl py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px] border border-slate-700 flex items-center justify-center gap-1 shadow">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i>
                     <span id="txtPrevRank">Sebelum</span>
                 </button>
-                <button onclick="sendCommand({action: 'closeRank'})" class="btn-ctrl py-1.5 rounded-xl bg-red-950/60 hover:bg-red-900/80 text-red-200 font-bold text-[11px] border border-red-500/40 flex items-center justify-center gap-1 shadow">
-                    <i class="fa-solid fa-xmark text-[10px]"></i>
+                <button onclick="sendCommand({action: 'closeRank'})" class="btn-ctrl py-1.5 rounded-xl bg-red-950/60 hover:bg-red-900/80 text-red-200 font-bold text-[10px] border border-red-500/40 flex items-center justify-center gap-1 shadow">
+                    <i class="fa-solid fa-xmark text-[9px]"></i>
                     <span id="txtCloseRankBtn">Tutup Pop-up</span>
                 </button>
-                <button onclick="sendCommand({action: 'nextRank'})" class="btn-ctrl py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] border border-slate-700 flex items-center justify-center gap-1 shadow">
+                <button onclick="sendCommand({action: 'nextRank'})" class="btn-ctrl py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px] border border-slate-700 flex items-center justify-center gap-1 shadow">
                     <span id="txtNextRank">Berikut</span>
-                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <i class="fa-solid fa-chevron-right text-[9px]"></i>
                 </button>
             </div>
         </div>
-
     </main>
 
     <!-- Footer Controls with Ke Muka Depan & Buka Slaid (View Slides) -->
@@ -457,6 +489,10 @@
             // Update rank header and buttons text
             const txtRankHeader = document.getElementById('txtRankHeader');
             if (txtRankHeader) txtRankHeader.textContent = (lang === 'en') ? 'Position Requirements (Pop-up Enlarge):' : 'Kelayakan Jawatan (Pop-up Perbesar):';
+            const txtTabModules = document.getElementById('txtTabModules');
+            if (txtTabModules) txtTabModules.textContent = (lang === 'en') ? '12 Slide Modules' : '12 Modul Slaid';
+            const txtTabRanks = document.getElementById('txtTabRanks');
+            if (txtTabRanks) txtTabRanks.textContent = (lang === 'en') ? 'Position Requirements' : 'Kelayakan Jawatan';
             const txtCloseRank = document.getElementById('txtCloseRank');
             if (txtCloseRank) txtCloseRank.textContent = (lang === 'en') ? 'Close Pop-up' : 'Tutup Pop-up';
             const txtCloseRankBtn = document.getElementById('txtCloseRankBtn');
@@ -478,10 +514,67 @@
             sendCommand({ action: 'setLang', lang: lang });
         }
 
-                let currentActiveRank = -1;
+                        // Fullscreen Toggle
+        function toggleFullscreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                const el = document.documentElement;
+                if (el.requestFullscreen) {
+                    el.requestFullscreen().catch(() => {});
+                } else if (el.webkitRequestFullscreen) {
+                    el.webkitRequestFullscreen();
+                }
+                updateFullscreenUI(true);
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                updateFullscreenUI(false);
+            }
+        }
+
+        function updateFullscreenUI(isFullscreen) {
+            const icon = document.getElementById('iconFullscreen');
+            const txt = document.getElementById('txtFullscreen');
+            if (icon) {
+                icon.className = isFullscreen ? 'fa-solid fa-compress text-[11px]' : 'fa-solid fa-expand text-[11px]';
+            }
+            if (txt) {
+                txt.textContent = isFullscreen ? (currentLanguage === 'en' ? 'Exit Full' : 'Keluar Skrin') : (currentLanguage === 'en' ? 'Fullscreen' : 'Skrin Penuh');
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => updateFullscreenUI(!!document.fullscreenElement));
+        document.addEventListener('webkitfullscreenchange', () => updateFullscreenUI(!!document.webkitFullscreenElement));
+
+        // Tab Switcher between Modules and Ranks
+        let currentRemoteTab = 'modules';
+        function switchRemoteTab(tab) {
+            currentRemoteTab = tab;
+            const btnMod = document.getElementById('tabBtnModules');
+            const btnRk = document.getElementById('tabBtnRanks');
+            const panelMod = document.getElementById('panelModules');
+            const panelRk = document.getElementById('panelRanks');
+
+            if (tab === 'modules') {
+                if (btnMod) btnMod.className = "flex-1 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-all flex items-center justify-center gap-1.5 shadow";
+                if (btnRk) btnRk.className = "flex-1 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-1.5";
+                if (panelMod) panelMod.classList.remove('hidden');
+                if (panelRk) panelRk.classList.add('hidden');
+            } else {
+                if (btnRk) btnRk.className = "flex-1 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-all flex items-center justify-center gap-1.5 shadow";
+                if (btnMod) btnMod.className = "flex-1 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-1.5";
+                if (panelMod) panelMod.classList.add('hidden');
+                if (panelRk) panelRk.classList.remove('hidden');
+            }
+        }
+
+        let currentActiveRank = -1;
 
         function handleRankClick(rankIndex) {
             setActiveRankButton(rankIndex);
+            switchRemoteTab('ranks');
             setActiveSlideButton(6);
             sendCommand({ action: 'openRank', rank: rankIndex });
         }
@@ -534,16 +627,9 @@
                 }
             });
 
-            // If on slide 6 (7. Pangkat & Jawatan), highlight rank selector card
-            const rankCard = document.getElementById('rankSelectorCard');
-            if (rankCard && currentActiveRank < 0) {
-                if (slideIndex === 6) {
-                    rankCard.classList.add('border-amber-500/40');
-                    rankCard.classList.remove('border-slate-800');
-                } else {
-                    rankCard.classList.remove('border-amber-500/40');
-                    rankCard.classList.add('border-slate-800');
-                }
+            // Auto-switch to rank tab if user navigates to slide 7
+            if (slideIndex === 6) {
+                switchRemoteTab('ranks');
             }
         }
 
