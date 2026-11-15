@@ -681,11 +681,18 @@
                         </select>
                     </div>
 
-                    <!-- Extra input for O-Level credits count -->
-                    <div id="eduExtraBox" class="hidden">
-                        <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Bilangan Kredit 'O' Level yang Diperolehi</span><span class="lang-en">Number of 'O' Level Credits Obtained</span></label>
-                        <input type="number" id="calcOCredits" placeholder="cth. 4" value="4" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
-                        <p class="text-[11px] text-amber-300 mt-1"><span class="lang-bm">* Syarat minimum Ahli Bomba: Sekurang-kurangnya 4 kredit dalam BC-GCE O Level. Kurang daripada 4 tidak mencukupi syarat.</span><span class="lang-en">* Minimum requirement for Fire Member: At least 4 credits in BC-GCE O Level. Less than 4 is insufficient.</span></p>
+                    <!-- Dynamic Specific Qualification Details -->
+                    <div id="eduExtraBox" class="hidden space-y-3">
+                        <div id="oLevelCreditField" class="hidden">
+                            <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Bilangan Kredit 'O' Level yang Diperolehi</span><span class="lang-en">Number of 'O' Level Credits Obtained</span></label>
+                            <input type="number" id="calcOCredits" placeholder="cth. 4" data-ph-bm="cth. 4" data-ph-en="e.g. 4" value="4" min="0" max="12" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                            <p class="text-[11px] text-amber-300 mt-1"><span class="lang-bm">* Syarat minimum Ahli Bomba: Sekurang-kurangnya 4 kredit dalam BC-GCE O Level. Kurang daripada 4 tidak mencukupi syarat.</span><span class="lang-en">* Minimum requirement for Fire Member: At least 4 credits in BC-GCE O Level. Less than 4 is insufficient.</span></p>
+                        </div>
+                        <div id="majorField" class="hidden">
+                            <label class="block text-sm font-semibold text-gray-300 mb-1" id="majorLabel"><span class="lang-bm">Bidang / Pengkhususan Kursus</span><span class="lang-en">Field of Study / Major</span></label>
+                            <input type="text" id="calcMajor" placeholder="cth. Kejuruteraan Awam / Sains Komputer / Pengurusan" data-ph-bm="cth. Kejuruteraan Awam / Sains Komputer / Pengurusan" data-ph-en="e.g. Civil Engineering / Computer Science / Management" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                            <p class="text-[11px] text-gray-400 mt-1" id="majorHint"><span class="lang-bm">Sila nyatakan bidang pengkhususan kelulusan anda.</span><span class="lang-en">Please specify your field of specialization.</span></p>
+                        </div>
                     </div>
 
                     <button onclick="calculateEligibility()" class="w-full bg-bombaRed hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all">
@@ -737,10 +744,33 @@
         function toggleEduExtra() {
             const edu = document.getElementById('calcEdu').value;
             const box = document.getElementById('eduExtraBox');
+            const oField = document.getElementById('oLevelCreditField');
+            const mField = document.getElementById('majorField');
+            const majorLabel = document.getElementById('majorLabel');
+            const majorHint = document.getElementById('majorHint');
+
+            box.classList.remove('hidden');
+            oField.classList.add('hidden');
+            mField.classList.add('hidden');
+
             if (edu === 'olevel') {
-                box.classList.remove('hidden');
-            } else {
-                box.classList.add('hidden');
+                oField.classList.remove('hidden');
+            } else if (edu === 'hnd') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang / Pengkhususan Diploma Tertinggi (HND in what?)</span><span class="lang-en">Field of Study (HND in what?)</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan pengkhususan HND anda (cth. Kejuruteraan Mekanikal / Sains Bangunan).</span><span class="lang-en">Specify your HND major (e.g. Mechanical Engineering / Building Studies).</span>`;
+            } else if (edu === 'hnc') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang / Pengkhususan Sijil Tertinggi (HNC in what?)</span><span class="lang-en">Field of Study (HNC in what?)</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan pengkhususan HNC anda.</span><span class="lang-en">Specify your HNC major.</span>`;
+            } else if (edu === 'ond') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang / Pengkhususan Diploma Kebangsaan (OND in what?)</span><span class="lang-en">Field of Study (OND in what?)</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan pengkhususan OND anda.</span><span class="lang-en">Specify your OND major.</span>`;
+            } else if (edu === 'degree' || edu === 'master') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang Ijazah Sarjana Muda / Sarjana (Degree in what?)</span><span class="lang-en">Degree Major / Field of Study</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan jurusan Ijazah Sarjana Muda anda.</span><span class="lang-en">Specify your Bachelor's / Master's degree major.</span>`;
             }
         }
 
@@ -751,6 +781,7 @@
             const weight = parseFloat(document.getElementById('calcWeight').value);
             const edu = document.getElementById('calcEdu').value;
             const oCredits = parseInt(document.getElementById('calcOCredits').value) || 0;
+            const majorInput = (document.getElementById('calcMajor') ? document.getElementById('calcMajor').value.trim() : '');
             const resultBox = document.getElementById('calcResult');
 
             resultBox.classList.remove('hidden');
@@ -772,6 +803,11 @@
             html += `<div class='grid grid-cols-2 gap-2 text-xs bg-black/30 p-3 rounded-xl border border-blue-900/50 mb-3 text-left'>`;
             html += `<div>• ${T('Ketinggian','Height')}: <strong class='text-white'>${heightCm} cm</strong> (${passedHeight ? '✅ Lulus' : '❌ Kurang min ' + minHeightCm + 'cm'})</div>`;
             html += `<div>• BMI: <strong class='text-white'>${bmi.toFixed(2)}</strong> (${passedBmi ? '✅ 19-27' : '❌ ' + (bmi < 19 ? 'Terlalu Rendah' : 'Terlalu Tinggi')})</div>`;
+            if (edu === 'olevel') {
+                html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>BC-GCE 'O' Level (${oCredits} Kredit)</strong></div>`;
+            } else if (majorInput) {
+                html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>${edu.toUpperCase()} (${majorInput})</strong></div>`;
+            }
             html += `</div>`;
 
             let eligiblePositions = [];
@@ -882,6 +918,7 @@
             let saved = 'bm';
             try { saved = localStorage.getItem('bombaLang') || 'bm'; } catch (e) {}
             setLang(saved === 'en' ? 'en' : 'bm');
+            toggleEduExtra();
         })();
     </script>
 </body>
