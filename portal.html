@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ms" data-lang="bm" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Pengambilan Jabatan Bomba dan Penyelamat Brunei</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bombaBlue: '#0b1d3f',
+                        bombaRed: '#dc2626',
+                        bombaGold: '#f59e0b',
+                        bombaDark: '#040b17'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'glow-red': '0 0 35px -5px rgba(220, 38, 38, 0.45)',
+                        'glow-gold': '0 0 30px -5px rgba(245, 158, 11, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html[data-lang="bm"] .lang-en { display: none !important; }
+        html[data-lang="en"] .lang-bm { display: none !important; }
+
+        /* Premium Modern Ambient Mesh Background */
+        body {
+            background-color: #040b17 !important;
+            background-image: 
+                radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.16) 0%, transparent 40%),
+                radial-gradient(circle at 88% 12%, rgba(245, 158, 11, 0.12) 0%, transparent 35%),
+                radial-gradient(circle at 50% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Glassmorphism Card Refinement */
+        .bg-bombaBlue\/60, .bg-bombaBlue\/40, .bg-bombaDark\/60 {
+            background: linear-gradient(135deg, rgba(11, 29, 63, 0.72) 0%, rgba(4, 11, 23, 0.88) 100%) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-color: rgba(56, 189, 248, 0.18) !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Smooth Card Hover Elevation & Glow */
+        .grid > div.bg-bombaDark\/60:hover, 
+        .grid > div.bg-bombaBlue\/60:hover {
+            border-color: rgba(245, 158, 11, 0.5) !important;
+            box-shadow: 0 14px 40px -10px rgba(220, 38, 38, 0.35) !important;
+            transform: translateY(-3px);
+        }
+
+        /* Hero Spotlight Glow */
+        #tab-overview .rounded-3xl.overflow-hidden {
+            background: linear-gradient(135deg, rgba(8, 20, 46, 0.85) 0%, rgba(11, 29, 63, 0.9) 50%, rgba(4, 11, 23, 0.95) 100%) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.25) !important;
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(220, 38, 38, 0.25) !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #040b17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
+
+        /* Interactive table hover smooth */
+        table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+        table tbody tr:hover {
+            background-color: rgba(30, 58, 138, 0.35) !important;
+        }
+
+        /* Input glow on focus */
+        input:focus, select:focus {
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5) !important;
+            border-color: #f59e0b !important;
+        }
+
+        /* Smooth button transitions */
+        button, a {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        button:active, a:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="bg-bombaDark text-gray-100 font-sans min-h-screen flex flex-col selection:bg-bombaRed selection:text-white">
+
+    <header class="bg-bombaBlue/90 backdrop-blur-md sticky top-0 z-50 border-b border-blue-900/50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-bombaRed to-red-800 rounded-xl flex items-center justify-center shadow-md border border-red-500/30">
+                    <i class="fa-solid fa-fire-extinguisher text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <span class="lang-bm">JABATAN BOMBA DAN PENYELAMAT</span><span class="lang-en">FIRE AND RESCUE DEPARTMENT</span>
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-bombaGold font-medium tracking-wider"><span class="lang-bm">KEMENTERIAN HAL EHWAL DALAM NEGERI • BRUNEI</span><span class="lang-en">MINISTRY OF HOME AFFAIRS • BRUNEI</span></p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                <button onclick="switchTab('overview')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-bombaRed text-white shadow-md" data-target="overview"><span class="lang-bm">Utama</span><span class="lang-en">Home</span></button>
+                <button onclick="switchTab('requirements')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/5" data-target="requirements"><span class="lang-bm">Syarat & Kelayakan</span><span class="lang-en">Requirements & Eligibility</span></button>
+                <button onclick="switchTab('tests')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/5" data-target="tests"><span class="lang-bm">Ujian & IPPT</span><span class="lang-en">Tests & IPPT</span></button>
+                <button onclick="switchTab('ranks')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/5" data-target="ranks"><span class="lang-bm">Jawatan & Pangkat</span><span class="lang-en">Positions & Ranks</span></button>
+                <button onclick="switchTab('calculator')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/5" data-target="calculator"><span class="lang-bm">Semakan Kelayakan</span><span class="lang-en">Eligibility Check</span></button>
+            </nav>
+            <div class="flex items-center">
+                <div class="flex items-center mr-2 sm:mr-3 rounded-xl border border-bombaGold/60 bg-bombaDark/40 p-0.5" role="group" aria-label="Language / Bahasa">
+                    <button id="lang-bm" onclick="setLang('bm')" class="px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all bg-bombaGold text-bombaBlue">BM</button>
+                    <button id="lang-en" onclick="setLang('en')" class="px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all text-gray-300">EN</button>
+                </div>
+                <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all mr-2">
+                    <i class="fa-solid fa-arrow-left text-bombaGold"></i> <span class="lang-bm">Pilih Mod</span><span class="lang-en">Choose Mode</span>
+                </a>
+                <a href="presentation.html" class="hidden sm:inline-flex items-center gap-1.5 bg-red-950/70 hover:bg-red-900 border border-red-500/40 text-red-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all mr-2">
+                    <i class="fa-solid fa-chalkboard-user text-bombaGold"></i> <span class="lang-bm">Mod Pembentangan</span><span class="lang-en">Presentation</span>
+                </a>
+                <a href="https://www.recruitment.gov.bn" target="_blank" class="hidden sm:inline-flex items-center gap-2 bg-bombaGold text-bombaBlue px-4 py-2 rounded-xl text-sm font-bold shadow-md hover:bg-amber-400 transition-all">
+                    <i class="fa-solid fa-globe"></i> PSCR Portal
+                </a>
+                <button id="mobileMenuBtn" class="md:hidden text-white p-2 focus:outline-none" onclick="toggleMobileMenu()">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-bombaBlue border-b border-blue-900 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('overview'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold bg-bombaRed text-white"><span class="lang-bm">Utama</span><span class="lang-en">Home</span></button>
+            <button onclick="switchTab('requirements'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:bg-white/5"><span class="lang-bm">Syarat & Kelayakan</span><span class="lang-en">Requirements & Eligibility</span></button>
+            <button onclick="switchTab('tests'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:bg-white/5"><span class="lang-bm">Ujian & IPPT</span><span class="lang-en">Tests & IPPT</span></button>
+            <button onclick="switchTab('ranks'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:bg-white/5"><span class="lang-bm">Jawatan & Pangkat</span><span class="lang-en">Positions & Ranks</span></button>
+            <button onclick="switchTab('calculator'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:bg-white/5"><span class="lang-bm">Semakan Kelayakan</span><span class="lang-en">Eligibility Check</span></button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- TAB 1: OVERVIEW -->
+        <section id="tab-overview" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-blue-950 via-bombaBlue to-blue-900 border border-blue-800/40 shadow-2xl p-6 sm:p-10 lg:p-12">
+                <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-bombaRed/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-6">
+                        <span class="bg-bombaRed text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"><span class="lang-bm">Portal Rasmi Pengambilan</span><span class="lang-en">Official Recruitment Portal</span></span>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                            <span class="lang-bm">Berkhidmat Demi Keselamatan Negara & Masyarakat</span><span class="lang-en">Serving for the Safety of the Nation & Community</span>
+                        </h2>
+                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
+                            <span class="lang-bm">Sertai barisan wira negara di</span><span class="lang-en">Join the nation's heroes at the</span> <strong class="text-white"><span class="lang-bm">Jabatan Bomba dan Penyelamat</span><span class="lang-en">Fire and Rescue Department</span></strong><span class="lang-bm">, Kementerian Hal Ehwal Dalam Negeri Negara Brunei Darussalam. Lindungi nyawa, harta benda, dan alam sekitar dengan profesionalisme tinggi.</span><span class="lang-en">, Ministry of Home Affairs, Negara Brunei Darussalam. Protect lives, property and the environment with a high level of professionalism.</span>
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="switchTab('requirements')" class="bg-bombaRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-check"></i> <span class="lang-bm">Semak Syarat Kelayakan</span><span class="lang-en">Check Eligibility Requirements</span>
+                            </button>
+                            <a href="https://www.recruitment.gov.bn" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-xl backdrop-blur-md transition-all border border-white/20 flex items-center gap-2">
+                                <i class="fa-solid fa-external-link-alt"></i> <span class="lang-bm">Mohon Melalui PSCR</span><span class="lang-en">Apply via PSCR</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="w-64 h-64 sm:w-80 sm:h-80 bg-gradient-to-tr from-bombaRed/30 to-bombaGold/20 rounded-3xl p-6 border border-white/10 shadow-inner flex flex-col items-center justify-center text-center relative">
+                            <div class="absolute inset-0 bg-radial-gradient from-transparent to-black/40 rounded-3xl"></div>
+                            <div class="relative z-10 space-y-3">
+                                <div class="w-20 h-20 bg-bombaGold text-bombaBlue rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold shadow-lg">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white"><span class="lang-bm">Talian Kecemasan</span><span class="lang-en">Emergency Hotline</span></h3>
+                                <p class="text-4xl font-extrabold text-bombaGold tracking-wider">995</p>
+                                <p class="text-xs text-gray-300"><span class="lang-bm">Sedia membantu 24 Jam</span><span class="lang-en">Ready to help 24 hours</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid: History, Visi, Misi -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Sejarah -->
+                <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 bg-bombaRed/20 text-bombaRed rounded-xl flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-landmark"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white"><span class="lang-bm">Sejarah Ringkas</span><span class="lang-en">Brief History</span></h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            <span class="lang-bm">Pada</span><span class="lang-en">On</span> <strong>9 November 1987</strong><span class="lang-bm">, nama Pasukan Bomba ditukar kepada Jabatan Perkhidmatan Bomba. Seterusnya, pada</span><span class="lang-en">, the Fire Brigade was renamed the Fire Services Department. Subsequently, on</span> <strong><span class="lang-bm">9 Mac 2006</span><span class="lang-en">9 March 2006</span></strong><span class="lang-bm">, dinamakan semula sebagai</span><span class="lang-en">, it was renamed the</span> <strong><span class="lang-bm">Jabatan Bomba dan Penyelamat</span><span class="lang-en">Fire and Rescue Department</span></strong> <span class="lang-bm">selaras dengan pembangunan negara dan kemajuan ekonomi yang menjurus kepada tugas menyelamat.</span><span class="lang-en">in line with national development and economic progress, with a growing focus on rescue duties.</span>
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-blue-900/60 text-xs text-gray-400">
+                        <span class="lang-bm">Dirasmikan oleh Yang Berhormat Pehin Orang Kaya Johan Pahlawan Dato Seri Setia Awang Haji Adanan bin Begawan Pehin Siraja Khatib Dato Seri Setia Awang Haji Mohd Yussof.</span><span class="lang-en">Officiated by the Honourable Pehin Orang Kaya Johan Pahlawan Dato Seri Setia Awang Haji Adanan bin Begawan Pehin Siraja Khatib Dato Seri Setia Awang Haji Mohd Yussof.</span>
+                    </div>
+                </div>
+
+                <!-- Visi & Misi -->
+                <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-500/20 text-bombaGold rounded-xl flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white"><span class="lang-bm">Visi</span><span class="lang-en">Vision</span></h3>
+                        </div>
+                        <p class="text-sm text-gray-300 italic bg-black/20 p-3 rounded-xl border border-blue-900/40">
+                            <span class="lang-bm">"Bekerjasama Dengan Masyarakat Bagi Melindungi Apa Yang Mereka Hargai"</span><span class="lang-en">"Working Together With the Community to Protect What They Value"</span>
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-bombaRed/20 text-bombaRed rounded-xl flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white"><span class="lang-bm">Misi</span><span class="lang-en">Mission</span></h3>
+                        </div>
+                        <p class="text-sm text-gray-300 italic bg-black/20 p-3 rounded-xl border border-blue-900/40">
+                            <span class="lang-bm">"Mengurangkan Kadar Kejadian Akibat Kebakaran Dan Bertindak Dengan Cara Profesional Bagi Menangani Apa-Apa Jua Panggilan Kecemasan"</span><span class="lang-en">"Reducing the Rate of Fire Incidents and Acting Professionally to Handle Any Emergency Call"</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tugas & Tanggungjawab -->
+                <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 bg-bombaGold/20 text-bombaGold rounded-xl flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-tasks"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white"><span class="lang-bm">Tugas & Tanggungjawab</span><span class="lang-en">Duties & Responsibilities</span></h3>
+                        <ul class="space-y-2.5 text-sm text-gray-300">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-bombaGold mt-1"></i> <span class="lang-bm">Memadamkan, melawan, mencegah dan mengawal api.</span><span class="lang-en">Extinguishing, fighting, preventing and controlling fires.</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-bombaGold mt-1"></i> <span class="lang-bm">Menjaga keselamatan nyawa dan harta benda jika berlaku kebakaran.</span><span class="lang-en">Safeguarding lives and property in the event of a fire.</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-bombaGold mt-1"></i> <span class="lang-bm">Menyiasat sebab, punca dan keadaan kebakaran.</span><span class="lang-en">Investigating the causes and circumstances of fires.</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-bombaGold mt-1"></i> <span class="lang-bm">Perkhidmatan kemanusiaan & perlindungan bencana.</span><span class="lang-en">Humanitarian services & disaster protection.</span></li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-blue-900/60 text-xs text-gray-400">
+                        <span class="lang-bm">Bahagian Tenaga Manusia dan Perancangan Latihan (Tel: 2380409 sambungan 246)</span><span class="lang-en">Manpower and Training Planning Division (Tel: 2380409 ext. 246)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Codes Section -->
+            <div class="bg-gradient-to-br from-blue-950 to-bombaBlue rounded-2xl p-6 sm:p-8 border border-blue-800/50 shadow-xl text-center space-y-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-white"><span class="lang-bm">Imbas & Ikuti Saluran Rasmi</span><span class="lang-en">Scan & Follow Our Official Channels</span></h3>
+                    <p class="text-sm text-gray-400"><span class="lang-bm">Gunakan kod QR di bawah untuk mengakses maklumat brosur, Facebook, Instagram, dan TikTok Jabatan Bomba.</span><span class="lang-en">Use the QR codes below to access the brochure and the Fire Department's Facebook, Instagram and TikTok.</span></p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                    <div class="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center space-y-2">
+                        <div class="w-28 h-28 bg-white rounded-lg flex items-center justify-center border border-gray-300 overflow-hidden">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAAD1klEQVR42u2dzY3jOBCFX60E+CgBE4BDkTKYkBod0mQgheIAFiCPBki8PRRJkXb3DDCXvTweDNvt71IoVL36EduIvzvnP/jbI1KkSJEvZLRy9mgGIJvZmg2IM2wHgHMtL/WXs2wrciAnkiSBJRWn2R6zOw2P9hEAsJEkg2wr8pUsoQUAP1eAn3cSWJ6Gc83m77YAeNDaZVuR3Zn7D/EHbQsZtoU8w989bjQAsO2QbUX+mczGAxOBOAPARJz3BGxhoiwk8rdxqHrIlHD+DP7OzvXfmYgGIgI41wBgIYAo24ocyezFliujj0s/P260HRN7nW1mZqtsK3KIQ0vLUzEbzxVG4FleznUCzhU2xCvZVmR3yDCRdMUzkceSgI0JwJLqX5ngf7iIQ7YVOdb29wSSqX0/kXzciPP+NJx2o3085tIukm1FflHbb7/m1FXvrp+RDUCp7Yk4JZfdsq3I11xWA88BdMGIDOhy2ZXpvKutXCZyIMmQzT4CYLbCvQTnnfTJ2bkC2Pg0AK1TJNuKHDR1C0FX9HF/2Zh8SuaNRu82LopDIgdyeRqwkLbHG21fyBKMQi4V/eeKJo+ykQ/N7UW+6aHNC/wyqK+ypx9zFBW0kDyg2l7kF5oaQ0Mo1E4RFtI3PtxzFlKaWuSrDzE1UVRjzuGeUxuNLTZVTa04JHIgY+kR2UdXeZUJPo948+W0KqdTbTTKtiJ70naXzlcvqHzn9f4OAIgzeCCbu5RsK3LQQ52w9iCDUsLX2r7Myy6NpFwmstdDfb1VHMRfqhRiaw21F/mQyHpmIP5IhrLcAZ77nADkmVuoux7nz2fd/YjZqB00ka+5bOL1vEbNamgZjLx+1xdxsq3Isbbn2AZC8aGSvPhW4MuHRI6aulNGxaVSN0i7mo/qD4n8juQBwGzNZrZOLBvTPkhL4BFvZala/SGR3+ay0Hesy/OIntDY7Q95VtOsQ+S7D706TVfW81qqbkeaWuSbHnp1kNYzwhYAbxw1N9PcXuQruZDX5R8411xv9kC2ujr0RdCSbUX21Vhfl416CDUYeURi7RkpDonsyGjmddmO3C76KA5VcplPQvr7QWRbkWMcqiEIQP+gYhVF5dTlNGlqke9xqNyD5l9ls90v/7juRiubsvUnsq3IsS6r96B1j2+08dmBYcLBK7XJtiJ7HwKu6t1bQ1O/ANK8Ce3iPfmQyC996GpHh1qSlY9ta2hRXSbyzz6EwZFqgd/3IqWpRb6Rb1d+BOCKOUA0w+nD2ProtGwrsiPbPWhxrnXZklCG93G8MaY95iHbiizH9L8WRIoU+T+T/wFvN5WhhxI6QwAAAABJRU5ErkJggg==" alt="QR Brochure" class="w-full h-full object-contain" style="image-rendering:pixelated;">
+                        </div>
+                        <span class="text-xs font-bold text-bombaBlue">BROCHURE</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center space-y-2">
+                        <div class="w-28 h-28 bg-white rounded-lg flex items-center justify-center border border-gray-300 overflow-hidden">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKAQAAAABTUiuoAAACI0lEQVR42u2bMW7kMAxFH2MDKWVgD5CjyDdb5Eh7A/souYFcDmDjb0HJM9kqzQIsqGJgSL/6BMmvL46JH679jR+vhCY0oW9wWF/rYQZc5nsrMI7mJCsKdJIkCYpkK5NsBfS5AFWS1JKsENAZAIPpBEC79S+jABwL1D9JVjzoMQ9FsUyitiQrNPQy+92A2i5LsqJWwiHjpxMOgCLwmlhE30uyQkAv133erdZREz3LdjMzW5KsEFD0strkwlBbT7XXwy3JCnHfmnsy2QLaDjMopzevnnRH3rfC5NaJtnL2L7UhB2ubbltqytyKojImeW7VDQww7R/CXpXHryQrSG61Z4863bzwSkg5/VRb5lYYaDnRBqNvcZk2QPqagXIHL8mK0rfuFPLCWNvwDmvLvhVLE74PL7c8zAvjvgAc/Q7WQ5ZkxdKEbZK2cpvuTHIPPvtWqGj9I9lfq2NRj2BGK4omfAlKTyuGOiQ1YTTnaZgXt/M0xLvv1ZbRChQtz55nt3pmlLJvxbsd129qndqe12aG/Eiygnnwd24VqfsbbfxktILNPAHaysMHn9zfWLn8IMmK4ureYzPnbLUhq9vlrq44ppP9I52nQNA+MXi8yx2MfemOodlyGfUr37fiQcvD9LkMs9Dt3iIlWZE04e3laryT+D1Z/YWSdHVDQUdQum631cer32XrMdPHNJKsWDNPw40fN69rFMZ834oBtfxHUEIT+l+gfwEahbFYPPjLXwAAAABJRU5ErkJggg==" alt="QR Facebook" class="w-full h-full object-contain" style="image-rendering:pixelated;">
+                        </div>
+                        <span class="text-xs font-bold text-bombaBlue">FACEBOOK</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center space-y-2">
+                        <div class="w-28 h-28 bg-white rounded-lg flex items-center justify-center border border-gray-300 overflow-hidden">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADMElEQVR42u2cQY7sNgxEHyMBs7SBHKCPYt9sMDezjzIH+IC9HEBGZSHKdv8AAZJdLGph9DS6NuxqslikxsS/Pusf/IcToAAF6H8K2s3PDLCOh79iNwPAbIT2oRzRez4oSZJUKTBtSfoaD3MejEelBZMkaYvodQHy3/5QPEd8bklSezB955oyPHlE9LoC7dkf64g/InodgfIbGf6UAYj9MAEYA7C+SkSvL0Z4Czr8GNMCQCrWUkbROucCg4A9otcB6KhdBOwfgj1T5cK0+cM+N2A1q2ozovf0HDFcJtWPCQpax4TW148Bh8FQUESvHz8iY3PLDDZzmM1DqfJSX+Pf1WZE78kg3GKor5JgkLQMkhaSGxDTltT8iCQtEb3n9xrTcmSrxWHPxabtyILD5BrzMNbxVwZSRO/xOUIFd6MkVc2wDMWVpTchEpMKnjwieh1UjaGRQVtjyTIUtIATpFKFqBodMCLJKQD1O/fGsw0y3MpW0xbBiA4YUXkgTwVMktqjuLKsaSQY0VHV0DKcPKjvlZvKqEPR6DW6UJZ+fksFTVYkudA8FWgwooteownISWr2ZGs43JRopAlGPN6PSDIGYfAhn2+RCnCc3WfJrAasY/gRXeiIS15qAW46wv9MTVSGH9GJjjgdh6tq3MqJV43SPhzRezZoz9jn90dbomzLljZ7/ZDNJPlKVWzedlQ1Wgt69RU0ZanWm4Yf0UnVuMrE25yTWxNylxoRvYdXDTMmFWzeM8BhVU+uY5IvTZFk8/BjLjkjes8GDS1HfL0KrC+p3dI4rGmLtqAbGzNd6AhvLatm8AmHah96tRk+9Yiq0YOOOL/pSzv+PhdXzD47yxHTmQpoU9ArR9wW74IRnfQafrb0vjbzlhlu3mZE7/F+RD3nbu01Em+96V1lBCMeDzpXLNvdjNqRrmMSq5m5KcFZWCJ6jwf53fDdr4Dra3xbqarXvkbCxe6t+zx36W4bM7cFTGIXuzfQbna5UdIGNle78tyw2iNHPBz0fje85Hrvk300GH6hem9nz8UAE8MW0Xs+6LobnptmeEnSd4bpO6OFw7ycRI54OsjivxcGKEAB+ofzF0tI5SIPUqmrAAAAAElFTkSuQmCC" alt="QR Instagram" class="w-full h-full object-contain" style="image-rendering:pixelated;">
+                        </div>
+                        <span class="text-xs font-bold text-bombaBlue">INSTAGRAM</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center space-y-2">
+                        <div class="w-28 h-28 bg-white rounded-lg flex items-center justify-center border border-gray-300 overflow-hidden">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlIAAAJSAQAAAAAgpBbeAAAD80lEQVR42u2d4W7rIAxG4b44zpttT+b7w/3AkLRLt6y9ujpIXYGkZxGRPtnGQPVyVfn8U64rsGDBggULFixY/zWrTkU9cYNqW63Vlu9RjLGHBQvWm1jeiy64h3JFz1bdo8f6T1v/jTH2sGDBeiNr2F5qh3Lpu5StWmlDrboNZow9LFiw/ilW87DB3KVqzUf9OZY92c97hAUL1vdZUiq/qZiVUrYqT9IueC5j7GHBgnURK0e/FMMPDzGuhSVmpfnwGFuOfn35XMbYw4IF6xdY8+yj1Emxr63OfesMpH35XJZqxtjDggXrkuJ3iq7GHZZUzd3S3OMoH4w9LFiwXs4a/mJYYLWG5SVrS3ZY82GFWdmqPfFctqsbYw8LFqwL7K/czr36VqRrjni1nv/VsL9gwYL1Rpb3jAnF7seVaOcM1uZhgW2n8r/sQYuxhwUL1k/8x9AszTJqvtE9VCw0qvUrVpRHMWVTfPlcVk7PQvIeYcGCdYplSWG02lF/1WMPLSdLvmj2O8cMQP7r68qj3awAvigsWLDOsyz5jEPDampHyVH7redRzKyI81sZCqb6XgPbLhvWeI+wYME6VWQFzVn1o0+12VqyRX+GzWRdwYbNFerVbvMAx88h5m2Ok/cICxasJ1hb9xPlN46c1nmldv62RQtlcc1zmKsySq/mec1Rw3+EBQvWOZZ1NRo5+NvBSm35jrq23POnFFlYLe3DkzVOuRi2+ourX8l7hAUL1in/cd37a73Dlhz87G0mm2lhzVn8ay7ZsMNkd+mD/QULFqxn9cvuapelSFhWr9wz61cp2ZNc82Fntcp+pBQN/YIFC9Yz+jWi9vmKlePYvu64rznNZw3LXmVuh4ZZmTxL3iMsWLBO69dep/btI69yzE9+lOyHzivAV3usJMvLpp2o8R9hwYL1U5Yd1PatIy3MqrjXrdUCG/abJ18S/YIFC9brWfn8ovhoNVLejUfxL2lYrKSsFf8RFixYV7DsoR322P7KPuO6mijnetkucs/6IViwYP0Oy07YX55O/pBu6Sw27d6qNUfNxw6u00oixh4WLFiXsewkK8frtROPrDDtiihbS7oVFphWUxpjDwsWrAtY9jRrPcvb+6lr222XHut2l/zGkdff+xh7WLBgXcKyk1GwdYecEbE/2jvHlz1dG/OPsGDBepf9VXLGxLzzV1axOdsr/wfi97BgwbqeZd9mKY4/WvIUdZZkzqXYTpzFxnuEBQvWa1jezzDSOUYR5fJ+Dq72oA4dq8TvYcGC9XrWYfxr7st+4rp6m7MkYcGC9W7WfJZ3WF3jVMl7O12ER4n/CAsWrLewql+G+mTsYcGCBQsWLFiwXsv6CzfwOiWaoQvLAAAAAElFTkSuQmCC" alt="QR TikTok" class="w-full h-full object-contain" style="image-rendering:pixelated;">
+                        </div>
+                        <span class="text-xs font-bold text-bombaBlue">TIKTOK</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: REQUIREMENTS -->
+        <section id="tab-requirements" class="tab-content hidden space-y-8">
+            <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+                <div class="border-b border-blue-900/60 pb-6">
+                    <span class="bg-bombaGold text-bombaBlue text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"><span class="lang-bm">Syarat Am Pengambilan</span><span class="lang-en">General Recruitment Requirements</span></span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-3"><span class="lang-bm">Syarat-Syarat Kelayakan Pemohon</span><span class="lang-en">Applicant Eligibility Requirements</span></h2>
+                    <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Sila pastikan anda memenuhi kriteria asas sebelum membuat permohonan rasmi.</span><span class="lang-en">Please make sure you meet the basic criteria before submitting an official application.</span></p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Rule 1 -->
+                    <div class="flex items-start gap-4 bg-black/20 p-5 rounded-2xl border border-blue-900/40">
+                        <div class="w-10 h-10 rounded-xl bg-bombaRed text-white font-bold flex items-center justify-center flex-shrink-0 shadow-md">1</div>
+                        <div>
+                            <h4 class="font-bold text-white"><span class="lang-bm">Kewarganegaraan</span><span class="lang-en">Citizenship</span></h4>
+                            <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Rakyat Kebawah Duli Yang Maha Mulia Paduka Seri Baginda Sultan Dan Yang Di-Pertuan Negara Brunei Darussalam.</span><span class="lang-en">A subject of His Majesty the Sultan and Yang Di-Pertuan of Negara Brunei Darussalam.</span></p>
+                        </div>
+                    </div>
+                    <!-- Rule 2 -->
+                    <div class="flex items-start gap-4 bg-black/20 p-5 rounded-2xl border border-blue-900/40">
+                        <div class="w-10 h-10 rounded-xl bg-bombaRed text-white font-bold flex items-center justify-center flex-shrink-0 shadow-md">2</div>
+                        <div>
+                            <h4 class="font-bold text-white"><span class="lang-bm">Status Perkahwinan</span><span class="lang-en">Marital Status</span></h4>
+                            <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Pemohon perempuan mestilah</span><span class="lang-en">Female applicants must be</span> <strong><span class="lang-bm">belum berkahwin</span><span class="lang-en">unmarried</span></strong> <span class="lang-bm">(bujang).</span><span class="lang-en">(single).</span></p>
+                        </div>
+                    </div>
+                    <!-- Rule 3 -->
+                    <div class="flex items-start gap-4 bg-black/20 p-5 rounded-2xl border border-blue-900/40">
+                        <div class="w-10 h-10 rounded-xl bg-bombaRed text-white font-bold flex items-center justify-center flex-shrink-0 shadow-md">3</div>
+                        <div>
+                            <h4 class="font-bold text-white"><span class="lang-bm">Pendengaran</span><span class="lang-en">Hearing</span></h4>
+                            <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Tiada sebarang masalah pendengaran.</span><span class="lang-en">No hearing problems.</span></p>
+                        </div>
+                    </div>
+                    <!-- Rule 4 -->
+                    <div class="flex items-start gap-4 bg-black/20 p-5 rounded-2xl border border-blue-900/40">
+                        <div class="w-10 h-10 rounded-xl bg-bombaRed text-white font-bold flex items-center justify-center flex-shrink-0 shadow-md">4</div>
+                        <div>
+                            <h4 class="font-bold text-white"><span class="lang-bm">Penglihatan</span><span class="lang-en">Eyesight</span></h4>
+                            <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Tidak buta warna (not colour blind).</span><span class="lang-en">Not colour blind.</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Rule -->
+                <div class="bg-gradient-to-r from-red-950/40 to-blue-950/40 p-6 rounded-2xl border border-red-900/30 space-y-2">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-kit-medical text-bombaRed text-xl"></i>
+                        <h4 class="font-bold text-white text-lg"><span class="lang-bm">Pemeriksaan Kesihatan</span><span class="lang-en">Medical Examination</span></h4>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        <span class="lang-bm">Lulus peperiksaan kesihatan yang dijalankan oleh Pegawai Perubatan Kerajaan berpandukan Garispanduan Pemeriksaan Kesihatan bagi Anggota Bomba & Penyelamat</span><span class="lang-en">Pass the medical examination conducted by a Government Medical Officer, based on the</span> <em><span class="lang-bm">(Medical Guideline For Firefighter)</span><span class="lang-en">Medical Guideline for Firefighters</span></em>.
+                    </p>
+                </div>
+
+                <!-- Tinggi & Berat Badan Requirements -->
+                <div class="pt-4 border-t border-blue-900/60 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-bombaGold/20 text-bombaGold rounded-xl flex items-center justify-center text-lg font-bold">
+                            <i class="fa-solid fa-ruler-vertical"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white"><span class="lang-bm">Syarat Tinggi, Berat & Ukuran Fizikal</span><span class="lang-en">Height, Weight & Physical Measurement Requirements</span></h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Lelaki -->
+                        <div class="bg-blue-950/50 p-6 rounded-2xl border border-blue-800/40 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white text-lg flex items-center gap-2"><i class="fa-solid fa-mars text-blue-400"></i> <span class="lang-bm">Bagi Lelaki</span><span class="lang-en">For Men</span></h4>
+                                <span class="bg-blue-900 text-blue-200 text-xs px-2.5 py-1 rounded-full font-semibold"><span class="lang-bm">Lelaki</span><span class="lang-en">Male</span></span>
+                            </div>
+                            <ul class="space-y-3 text-sm text-gray-300">
+                                <li class="flex items-center justify-between border-b border-blue-900/50 pb-2">
+                                    <span class="text-gray-400"><span class="lang-bm">Tinggi Minimum:</span><span class="lang-en">Minimum Height:</span></span>
+                                    <strong class="text-white">161 cm (5'3")</strong>
+                                </li>
+                                <li class="flex items-center justify-between border-b border-blue-900/50 pb-2">
+                                    <span class="text-gray-400"><span class="lang-bm">Indeks Jisim Badan (BMI):</span><span class="lang-en">Body Mass Index (BMI):</span></span>
+                                    <strong class="text-white">19 – 27</strong>
+                                </li>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-gray-400"><span class="lang-bm">Dada (Biasa):</span><span class="lang-en">Chest (Normal):</span></span>
+                                    <strong class="text-white">&lt; 34" (86 cm)</strong>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Wanita -->
+                        <div class="bg-blue-950/50 p-6 rounded-2xl border border-blue-800/40 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white text-lg flex items-center gap-2"><i class="fa-solid fa-venus text-pink-400"></i> <span class="lang-bm">Bagi Wanita</span><span class="lang-en">For Women</span></h4>
+                                <span class="bg-pink-950 text-pink-200 text-xs px-2.5 py-1 rounded-full font-semibold"><span class="lang-bm">Wanita (Bujang)</span><span class="lang-en">Female (Single)</span></span>
+                            </div>
+                            <ul class="space-y-3 text-sm text-gray-300">
+                                <li class="flex items-center justify-between border-b border-blue-900/50 pb-2">
+                                    <span class="text-gray-400"><span class="lang-bm">Tinggi Minimum:</span><span class="lang-en">Minimum Height:</span></span>
+                                    <strong class="text-white">152 cm (5')</strong>
+                                </li>
+                                <li class="flex items-center justify-between border-b border-blue-900/50 pb-2">
+                                    <span class="text-gray-400"><span class="lang-bm">Indeks Jisim Badan (BMI):</span><span class="lang-en">Body Mass Index (BMI):</span></span>
+                                    <strong class="text-white">19 – 27</strong>
+                                </li>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-gray-400"><span class="lang-bm">Status:</span><span class="lang-en">Status:</span></span>
+                                    <strong class="text-white"><span class="lang-bm">Belum Berkahwin</span><span class="lang-en">Unmarried</span></strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: TESTS & IPPT -->
+        <section id="tab-tests" class="tab-content hidden space-y-8">
+            <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+                <div>
+                    <span class="bg-bombaRed text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"><span class="lang-bm">Penilaian Fizikal</span><span class="lang-en">Physical Assessment</span></span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-3"><span class="lang-bm">Ujian-Ujian Semasa Pengambilan</span><span class="lang-en">Tests During Recruitment</span></h2>
+                    <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Ujian kecergasan fizikal (IPPT) dan ujian praktikal yang mesti dilalui oleh setiap calon.</span><span class="lang-en">Physical fitness tests (IPPT) and practical tests that every candidate must complete.</span></p>
+                </div>
+
+                <!-- IPPT Table -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-person-running text-bombaGold"></i> <span class="lang-bm">Ujian Kecergasan Dan Ketahanan Fizikal (IPPT)</span><span class="lang-en">Physical Fitness and Endurance Test (IPPT)</span>
+                    </h3>
+                    <div class="overflow-x-auto rounded-2xl border border-blue-900/60 shadow-lg">
+                        <table class="w-full text-left text-sm text-gray-300">
+                            <thead class="bg-blue-950 text-white uppercase text-xs">
+                                <tr>
+                                    <th class="px-6 py-4"><span class="lang-bm">Bil.</span><span class="lang-en">No.</span></th>
+                                    <th class="px-6 py-4"><span class="lang-bm">Ujian</span><span class="lang-en">Test</span></th>
+                                    <th class="px-6 py-4"><span class="lang-bm">Masa Lelaki</span><span class="lang-en">Men's Time</span></th>
+                                    <th class="px-6 py-4"><span class="lang-bm">Masa Wanita</span><span class="lang-en">Women's Time</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-blue-900/40 bg-bombaBlue/40">
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">1</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Larian 2.4 KM</span><span class="lang-en">2.4 km Run</span></td>
+                                    <td class="px-6 py-4 text-amber-300 font-semibold"><span class="lang-bm">11 Minit 30 Saat</span><span class="lang-en">11 min 30 sec</span></td>
+                                    <td class="px-6 py-4 text-pink-300 font-semibold"><span class="lang-bm">13 Minit 30 Saat</span><span class="lang-en">13 min 30 sec</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">2</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Tekan Tubi (Push Up)</span><span class="lang-en">Push-Up</span></td>
+                                    <td class="px-6 py-4 text-amber-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
+                                    <td class="px-6 py-4 text-pink-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">3</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Bangkit Tubi (Sit Up)</span><span class="lang-en">Sit-Up</span></td>
+                                    <td class="px-6 py-4 text-amber-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
+                                    <td class="px-6 py-4 text-pink-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Practical Test Table -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-fire-flame-curved text-bombaRed"></i> <span class="lang-bm">Ujian Praktikal</span><span class="lang-en">Practical Test</span>
+                    </h3>
+                    <div class="overflow-x-auto rounded-2xl border border-blue-900/60 shadow-lg">
+                        <table class="w-full text-left text-sm text-gray-300">
+                            <thead class="bg-red-950 text-white uppercase text-xs">
+                                <tr>
+                                    <th class="px-6 py-4"><span class="lang-bm">Bil.</span><span class="lang-en">No.</span></th>
+                                    <th class="px-6 py-4"><span class="lang-bm">Ujian Praktikal</span><span class="lang-en">Practical Test</span></th>
+                                    <th class="px-6 py-4"><span class="lang-bm">Masa / Jarak</span><span class="lang-en">Time / Distance</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-blue-900/40 bg-bombaBlue/40">
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">1</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Masuk Bilik Gelap</span><span class="lang-en">Enter Dark Room</span></td>
+                                    <td class="px-6 py-4 text-bombaGold font-semibold"><span class="lang-bm">1 Minit</span><span class="lang-en">1 minute</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">2</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Naik Tower</span><span class="lang-en">Climb Tower</span></td>
+                                    <td class="px-6 py-4 text-bombaGold font-semibold"><span class="lang-bm">2 Minit</span><span class="lang-en">2 minutes</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">3</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Berjalan Dengan Membawa 2 Batang Hos</span><span class="lang-en">Walk Carrying 2 Hoses</span></td>
+                                    <td class="px-6 py-4 text-bombaGold font-semibold"><span class="lang-bm">20 Meter</span><span class="lang-en">20 metres</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">4</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Naik Tangga Ke Tingkat 2 Bangunan</span><span class="lang-en">Climb Ladder to 2nd Floor of Building</span></td>
+                                    <td class="px-6 py-4 text-bombaGold font-semibold"><span class="lang-bm">10.5 Meter</span><span class="lang-en">10.5 metres</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-900/20">
+                                    <td class="px-6 py-4 font-bold text-white">5</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Kawad Kaki</span><span class="lang-en">Foot Drill</span></td>
+                                    <td class="px-6 py-4 text-bombaGold font-semibold"><span class="lang-bm">20 Meter</span><span class="lang-en">20 metres</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: RANKS & POSITIONS -->
+        <section id="tab-ranks" class="tab-content hidden space-y-8">
+            <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+                <div>
+                    <span class="bg-bombaGold text-bombaBlue text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"><span class="lang-bm">Peluang Kerjaya</span><span class="lang-en">Career Opportunities</span></span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-3"><span class="lang-bm">Syarat</span><span class="lang-en">Position</span> <span class="text-bombaGold"><span class="lang-bm">Kelayakan Jawatan</span><span class="lang-en">Eligibility Requirements</span></span></h2>
+                    <p class="text-sm text-gray-300 mt-1"><span class="lang-bm">Di Jabatan Bomba dan Penyelamat. Klik gambar pangkat untuk memperbesar.</span><span class="lang-en">At the Fire and Rescue Department. Click a rank image to enlarge.</span></p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
+                    <!-- 1. Penguasa Bomba Dan Penyelamat -->
+                    <div class="bg-bombaDark/60 border border-blue-900/60 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                        <div class="bg-bombaRed text-white text-center font-extrabold uppercase text-sm tracking-wide px-4 py-3 border-b-2 border-bombaGold"><span class="lang-bm">Penguasa Bomba Dan Penyelamat</span><span class="lang-en">Superintendent of Fire and Rescue</span></div>
+                        <div class="p-5 flex items-start gap-4">
+                            <img src="data:image/png;base64,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" alt="Pangkat Penguasa Bomba Dan Penyelamat" data-alt-bm="Pangkat Penguasa Bomba Dan Penyelamat" data-alt-en="Rank: Superintendent of Fire and Rescue" onclick="openRank(this.src, this.alt)" class="w-16 h-20 rounded-lg object-cover flex-shrink-0 cursor-zoom-in border border-blue-900/60">
+                            <div class="space-y-1.5 text-sm">
+                                <span class="inline-block border border-bombaGold text-bombaGold text-xs font-bold px-2.5 py-0.5 rounded-full"><span class="lang-bm">Bahagian II</span><span class="lang-en">Division II</span></span>
+                                <p><span class="text-gray-400"><span class="lang-bm">Umur:</span><span class="lang-en">Age:</span></span> <strong class="text-white"><span class="lang-bm">18 hingga 35 tahun</span><span class="lang-en">18 to 35 years</span></strong></p>
+                                <p class="text-gray-400"><span class="lang-bm">Kelayakan Akademik:</span><span class="lang-en">Academic Qualification:</span></p>
+                                <p class="font-bold text-white -mt-1"><span class="lang-bm">Ijazah Sarjana Muda</span><span class="lang-en">Bachelor's Degree</span></p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-3 border-t border-blue-900/60 flex-grow">
+                            <h4 class="text-bombaGold font-extrabold text-xs uppercase tracking-widest mb-2"><span class="lang-bm">Tugasan Utama</span><span class="lang-en">Main Duties</span></h4>
+                            <ul class="space-y-1.5 text-sm text-gray-200"><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Memimpin dan mengurus operasi Jabatan.</span><span class="lang-en">Leading and managing the Department's operations.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Merancang strategi operasi, keselamatan dan kesiapsiagaan.</span><span class="lang-en">Planning operational, safety and readiness strategies.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menyelaras pengurusan sumber manusia dan aset.</span><span class="lang-en">Coordinating the management of human resources and assets.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Memastikan dasar dan arahan Jabatan dilaksanakan.</span><span class="lang-en">Ensuring Department policies and directives are implemented.</span></li></ul>
+                        </div>
+                    </div>
+                    <!-- 2. Timbalan Penguasa Bomba Dan Penyelamat -->
+                    <div class="bg-bombaDark/60 border border-blue-900/60 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                        <div class="bg-bombaGold text-bombaBlue text-center font-extrabold uppercase text-sm tracking-wide px-4 py-3 border-b-2 border-bombaGold"><span class="lang-bm">Timbalan Penguasa Bomba Dan Penyelamat</span><span class="lang-en">Deputy Superintendent of Fire and Rescue</span></div>
+                        <div class="p-5 flex items-start gap-4">
+                            <img src="data:image/png;base64,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" alt="Pangkat Timbalan Penguasa Bomba Dan Penyelamat" data-alt-bm="Pangkat Timbalan Penguasa Bomba Dan Penyelamat" data-alt-en="Rank: Deputy Superintendent of Fire and Rescue" onclick="openRank(this.src, this.alt)" class="w-16 h-20 rounded-lg object-cover flex-shrink-0 cursor-zoom-in border border-blue-900/60">
+                            <div class="space-y-1.5 text-sm">
+                                <span class="inline-block border border-bombaGold text-bombaGold text-xs font-bold px-2.5 py-0.5 rounded-full"><span class="lang-bm">Bahagian III</span><span class="lang-en">Division III</span></span>
+                                <p><span class="text-gray-400"><span class="lang-bm">Umur:</span><span class="lang-en">Age:</span></span> <strong class="text-white"><span class="lang-bm">18 hingga 35 tahun</span><span class="lang-en">18 to 35 years</span></strong></p>
+                                <p class="text-gray-400"><span class="lang-bm">Kelayakan Akademik:</span><span class="lang-en">Academic Qualification:</span></p>
+                                <p class="font-bold text-white -mt-1"><span class="lang-bm">Diploma Tertinggi Kebangsaan (HND)</span><span class="lang-en">Higher National Diploma (HND)</span></p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-3 border-t border-blue-900/60 flex-grow">
+                            <h4 class="text-bombaGold font-extrabold text-xs uppercase tracking-widest mb-2"><span class="lang-bm">Tugasan Utama</span><span class="lang-en">Main Duties</span></h4>
+                            <ul class="space-y-1.5 text-sm text-gray-200"><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Membantu Penguasa dalam pengurusan Jabatan.</span><span class="lang-en">Assisting the Superintendent in managing the Department.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menyelaras operasi dan kesiapsiagaan pasukan.</span><span class="lang-en">Coordinating team operations and readiness.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Memantau pelaksanaan program dan aktiviti Jabatan.</span><span class="lang-en">Monitoring the implementation of Department programmes and activities.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Mengambil alih tugas Penguasa apabila diarahkan.</span><span class="lang-en">Taking over the Superintendent's duties when directed.</span></li></ul>
+                        </div>
+                    </div>
+                    <!-- 3. Penolong Penguasa Bomba Dan Penyelamat -->
+                    <div class="bg-bombaDark/60 border border-blue-900/60 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                        <div class="bg-bombaRed text-white text-center font-extrabold uppercase text-sm tracking-wide px-4 py-3 border-b-2 border-bombaGold"><span class="lang-bm">Penolong Penguasa Bomba Dan Penyelamat</span><span class="lang-en">Assistant Superintendent of Fire and Rescue</span></div>
+                        <div class="p-5 flex items-start gap-4">
+                            <img src="data:image/png;base64,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" alt="Pangkat Penolong Penguasa Bomba Dan Penyelamat" data-alt-bm="Pangkat Penolong Penguasa Bomba Dan Penyelamat" data-alt-en="Rank: Assistant Superintendent of Fire and Rescue" onclick="openRank(this.src, this.alt)" class="w-16 h-20 rounded-lg object-cover flex-shrink-0 cursor-zoom-in border border-blue-900/60">
+                            <div class="space-y-1.5 text-sm">
+                                <span class="inline-block border border-bombaGold text-bombaGold text-xs font-bold px-2.5 py-0.5 rounded-full"><span class="lang-bm">Bahagian III</span><span class="lang-en">Division III</span></span>
+                                <p><span class="text-gray-400"><span class="lang-bm">Umur:</span><span class="lang-en">Age:</span></span> <strong class="text-white"><span class="lang-bm">18 hingga 32 tahun</span><span class="lang-en">18 to 32 years</span></strong></p>
+                                <p class="text-gray-400"><span class="lang-bm">Kelayakan Akademik:</span><span class="lang-en">Academic Qualification:</span></p>
+                                <p class="font-bold text-white -mt-1"><span class="lang-bm">Sijil Tertinggi Kebangsaan (HNC)</span><span class="lang-en">Higher National Certificate (HNC)</span></p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-3 border-t border-blue-900/60 flex-grow">
+                            <h4 class="text-bombaGold font-extrabold text-xs uppercase tracking-widest mb-2"><span class="lang-bm">Tugasan Utama</span><span class="lang-en">Main Duties</span></h4>
+                            <ul class="space-y-1.5 text-sm text-gray-200"><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Membantu pengurusan operasi dan pentadbiran.</span><span class="lang-en">Assisting in operations and administration management.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menyelaras tugas serta aktiviti pasukan.</span><span class="lang-en">Coordinating team duties and activities.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Memantau kesiapsiagaan anggota dan jentera.</span><span class="lang-en">Monitoring the readiness of personnel and fire engines.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Membantu pengendalian insiden kecemasan.</span><span class="lang-en">Assisting in handling emergency incidents.</span></li></ul>
+                        </div>
+                    </div>
+                    <!-- 4. Pegawai Balai -->
+                    <div class="bg-bombaDark/60 border border-blue-900/60 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                        <div class="bg-bombaGold text-bombaBlue text-center font-extrabold uppercase text-sm tracking-wide px-4 py-3 border-b-2 border-bombaGold"><span class="lang-bm">Pegawai Balai</span><span class="lang-en">Station Officer</span></div>
+                        <div class="p-5 flex items-start gap-4">
+                            <img src="data:image/png;base64,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" alt="Pangkat Pegawai Balai" data-alt-bm="Pangkat Pegawai Balai" data-alt-en="Rank: Station Officer" onclick="openRank(this.src, this.alt)" class="w-16 h-20 rounded-lg object-cover flex-shrink-0 cursor-zoom-in border border-blue-900/60">
+                            <div class="space-y-1.5 text-sm">
+                                <span class="inline-block border border-bombaGold text-bombaGold text-xs font-bold px-2.5 py-0.5 rounded-full"><span class="lang-bm">Bahagian III</span><span class="lang-en">Division III</span></span>
+                                <p><span class="text-gray-400"><span class="lang-bm">Umur:</span><span class="lang-en">Age:</span></span> <strong class="text-white"><span class="lang-bm">18 hingga 30 tahun</span><span class="lang-en">18 to 30 years</span></strong></p>
+                                <p class="text-gray-400"><span class="lang-bm">Kelayakan Akademik:</span><span class="lang-en">Academic Qualification:</span></p>
+                                <p class="font-bold text-white -mt-1"><span class="lang-bm">Diploma Kebangsaan Peringkat Biasa (OND)</span><span class="lang-en">Ordinary National Diploma (OND)</span></p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-3 border-t border-blue-900/60 flex-grow">
+                            <h4 class="text-bombaGold font-extrabold text-xs uppercase tracking-widest mb-2"><span class="lang-bm">Tugasan Utama</span><span class="lang-en">Main Duties</span></h4>
+                            <ul class="space-y-1.5 text-sm text-gray-200"><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Mengurus dan mengetuai operasi di peringkat balai.</span><span class="lang-en">Managing and leading operations at station level.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Memastikan anggota dan jentera sentiasa bersiap sedia.</span><span class="lang-en">Ensuring personnel and fire engines are always ready.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menyelaras respons terhadap panggilan kecemasan.</span><span class="lang-en">Coordinating the response to emergency calls.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Memantau disiplin dan kebajikan anggota balai.</span><span class="lang-en">Monitoring the discipline and welfare of station personnel.</span></li></ul>
+                        </div>
+                    </div>
+                    <!-- 5. Timbalan Pegawai Balai -->
+                    <div class="bg-bombaDark/60 border border-blue-900/60 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                        <div class="bg-bombaRed text-white text-center font-extrabold uppercase text-sm tracking-wide px-4 py-3 border-b-2 border-bombaGold"><span class="lang-bm">Timbalan Pegawai Balai</span><span class="lang-en">Deputy Station Officer</span></div>
+                        <div class="p-5 flex items-start gap-4">
+                            <img src="data:image/png;base64,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" alt="Pangkat Timbalan Pegawai Balai" data-alt-bm="Pangkat Timbalan Pegawai Balai" data-alt-en="Rank: Deputy Station Officer" onclick="openRank(this.src, this.alt)" class="w-16 h-20 rounded-lg object-cover flex-shrink-0 cursor-zoom-in border border-blue-900/60">
+                            <div class="space-y-1.5 text-sm">
+                                <span class="inline-block border border-bombaGold text-bombaGold text-xs font-bold px-2.5 py-0.5 rounded-full"><span class="lang-bm">Bahagian IV</span><span class="lang-en">Division IV</span></span>
+                                <p><span class="text-gray-400"><span class="lang-bm">Umur:</span><span class="lang-en">Age:</span></span> <strong class="text-white"><span class="lang-bm">18 hingga 26 tahun</span><span class="lang-en">18 to 26 years</span></strong></p>
+                                <p class="text-gray-400"><span class="lang-bm">Kelayakan Akademik:</span><span class="lang-en">Academic Qualification:</span></p>
+                                <p class="font-bold text-white -mt-1"><span class="lang-bm">Diploma Kebangsaan Peringkat Biasa (OND)</span><span class="lang-en">Ordinary National Diploma (OND)</span></p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-3 border-t border-blue-900/60 flex-grow">
+                            <h4 class="text-bombaGold font-extrabold text-xs uppercase tracking-widest mb-2"><span class="lang-bm">Tugasan Utama</span><span class="lang-en">Main Duties</span></h4>
+                            <ul class="space-y-1.5 text-sm text-gray-200"><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Membantu Pegawai Balai mengurus operasi balai.</span><span class="lang-en">Assisting the Station Officer in managing station operations.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menyelaras tugasan anggota dan kesiapsiagaan jentera.</span><span class="lang-en">Coordinating personnel assignments and fire engine readiness.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Membantu mengetuai operasi kecemasan.</span><span class="lang-en">Helping lead emergency operations.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menjalankan tugas Pegawai Balai apabila diarahkan.</span><span class="lang-en">Performing the Station Officer's duties when directed.</span></li></ul>
+                        </div>
+                    </div>
+                    <!-- 6. Ahli Bomba Dan Penyelamat -->
+                    <div class="bg-bombaDark/60 border border-blue-900/60 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                        <div class="bg-bombaGold text-bombaBlue text-center font-extrabold uppercase text-sm tracking-wide px-4 py-3 border-b-2 border-bombaGold"><span class="lang-bm">Ahli Bomba Dan Penyelamat</span><span class="lang-en">Fire and Rescue Member</span></div>
+                        <div class="p-5 flex items-start gap-4">
+                            <img src="data:image/png;base64,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" alt="Pangkat Ahli Bomba Dan Penyelamat" data-alt-bm="Pangkat Ahli Bomba Dan Penyelamat" data-alt-en="Rank: Fire and Rescue Member" onclick="openRank(this.src, this.alt)" class="w-16 h-20 rounded-lg object-cover flex-shrink-0 cursor-zoom-in border border-blue-900/60">
+                            <div class="space-y-1.5 text-sm">
+                                <span class="inline-block border border-bombaGold text-bombaGold text-xs font-bold px-2.5 py-0.5 rounded-full"><span class="lang-bm">Bahagian IV</span><span class="lang-en">Division IV</span></span>
+                                <p><span class="text-gray-400"><span class="lang-bm">Umur:</span><span class="lang-en">Age:</span></span> <strong class="text-white"><span class="lang-bm">18 hingga 26 tahun</span><span class="lang-en">18 to 26 years</span></strong></p>
+                                <p class="text-gray-400"><span class="lang-bm">Kelayakan Akademik:</span><span class="lang-en">Academic Qualification:</span></p>
+                                <p class="font-bold text-white -mt-1"><span class="lang-bm">Kredit 4 matapelajaran dalam BC-GCE O Level</span><span class="lang-en">Credits in 4 subjects (B-C) at GCE 'O' Level</span></p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-3 border-t border-blue-900/60 flex-grow">
+                            <h4 class="text-bombaGold font-extrabold text-xs uppercase tracking-widest mb-2"><span class="lang-bm">Tugasan Utama</span><span class="lang-en">Main Duties</span></h4>
+                            <ul class="space-y-1.5 text-sm text-gray-200"><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Melaksanakan operasi pemadaman kebakaran.</span><span class="lang-en">Carrying out firefighting operations.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Menjalankan operasi menyelamat dan kecemasan.</span><span class="lang-en">Conducting rescue and emergency operations.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Mengendalikan jentera, peralatan dan PPE.</span><span class="lang-en">Operating fire engines, equipment and PPE.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Melaksanakan pemeriksaan serta penyenggaraan peralatan.</span><span class="lang-en">Carrying out equipment inspection and maintenance.</span></li><li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 border border-bombaGold flex-shrink-0"></span><span class="lang-bm">Membantu aktiviti pencegahan dan keselamatan kebakaran.</span><span class="lang-en">Assisting in fire prevention and safety activities.</span></li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-bombaRed/10 border border-bombaRed/30 p-4 rounded-xl flex items-center justify-between flex-wrap gap-4">
+                    <p class="text-sm text-gray-200">
+                        <span class="lang-bm">Sebarang jawatan kosong Jabatan Bomba dan Penyelamat akan diiklankan melalui laman sesawang</span><span class="lang-en">Any vacancies in the Fire and Rescue Department will be advertised on the</span> <strong>Public Service Commission Recruitment (PSCR)</strong><span class="lang-bm">.</span><span class="lang-en">website.</span>
+                    </p>
+                    <a href="https://www.recruitment.gov.bn" target="_blank" class="bg-bombaRed hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-md transition-all">
+                        <span class="lang-bm">Layari recruitment.gov.bn</span><span class="lang-en">Visit recruitment.gov.bn</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Rank image viewer -->
+            <div id="rankModal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6" onclick="closeRank()">
+                <div class="text-center space-y-3">
+                    <img id="rankModalImg" src="" alt="" class="max-h-[70vh] mx-auto rounded-2xl border border-blue-800 shadow-2xl" style="image-rendering:auto;">
+                    <p id="rankModalCap" class="text-white font-bold"></p>
+                    <p class="text-xs text-gray-400"><span class="lang-bm">Klik di mana-mana untuk menutup</span><span class="lang-en">Click anywhere to close</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: BMI & FITNESS CALCULATOR -->
+        <section id="tab-calculator" class="tab-content hidden space-y-8">
+            <div class="bg-bombaBlue/60 border border-blue-900/50 rounded-3xl p-6 sm:p-10 shadow-2xl max-w-2xl mx-auto space-y-6">
+                <div class="text-center space-y-2">
+                    <span class="bg-bombaGold text-bombaBlue text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"><span class="lang-bm">Alat Semakan</span><span class="lang-en">Checking Tool</span></span>
+                    <h2 class="text-2xl font-bold text-white"><span class="lang-bm">Semakan Kelayakan Jawatan & Fizikal</span><span class="lang-en">Position & Physical Eligibility Check</span></h2>
+                    <p class="text-sm text-gray-300"><span class="lang-bm">Semak kelayakan anda berdasarkan umur, tinggi, BMI serta kelulusan akademik rasmi untuk jawatan-jawatan di Jabatan Bomba dan Penyelamat.</span><span class="lang-en">Check your eligibility based on age, height, BMI, and official academic qualifications for positions in the Fire and Rescue Department.</span></p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Jantina</span><span class="lang-en">Gender</span></label>
+                            <select id="calcGender" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                                <option data-bm="Lelaki (Tinggi Min: 161 cm)" data-en="Male (Min Height: 161 cm)" value="male">Lelaki (Tinggi Min: 161 cm)</option>
+                                <option data-bm="Wanita (Tinggi Min: 152 cm - Bujang)" data-en="Female (Min Height: 152 cm - Single)" value="female">Wanita (Tinggi Min: 152 cm - Bujang)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Umur (Tahun)</span><span class="lang-en">Age (Years)</span></label>
+                            <input type="number" id="calcAge" placeholder="cth. 24" data-ph-bm="cth. 24" data-ph-en="e.g. 24" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Tinggi (sentimeter - cm)</span><span class="lang-en">Height (centimetres - cm)</span></label>
+                            <input type="number" id="calcHeight" step="1" placeholder="cth. 170" data-ph-bm="cth. 170" data-ph-en="e.g. 170" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Berat (kg)</span><span class="lang-en">Weight (kg)</span></label>
+                            <input type="number" id="calcWeight" step="0.1" placeholder="cth. 68" data-ph-bm="cth. 68" data-ph-en="e.g. 68" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Kelulusan Tertinggi & Akademik</span><span class="lang-en">Highest Academic Qualification</span></label>
+                        <select id="calcEdu" onchange="toggleEduExtra()" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                            <option data-bm="Master / Sarjana" data-en="Master's Degree" value="master">Master / Sarjana</option>
+                            <option data-bm="Ijazah Sarjana Muda (Degree)" data-en="Bachelor's Degree" value="degree">Ijazah Sarjana Muda (Degree)</option>
+                            <option data-bm="Diploma Tertinggi Kebangsaan (HND)" data-en="Higher National Diploma (HND)" value="hnd">Diploma Tertinggi Kebangsaan (HND)</option>
+                            <option data-bm="Sijil Tertinggi Kebangsaan (HNC)" data-en="Higher National Certificate (HNC)" value="hnc">Sijil Tertinggi Kebangsaan (HNC)</option>
+                            <option data-bm="Diploma Kebangsaan Peringkat Biasa (OND)" data-en="Ordinary National Diploma (OND)" value="ond">Diploma Kebangsaan Peringkat Biasa (OND)</option>
+                            <option data-bm="BC-GCE 'O' Level & BTEC Level 2" data-en="BC-GCE 'O' Level & BTEC Level 2" value="olevel">BC-GCE 'O' Level & BTEC Level 2</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Specific Qualification Details -->
+                    <div id="eduExtraBox" class="hidden space-y-3">
+                        <div id="oLevelCreditField" class="hidden">
+                            <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Bilangan Kredit 'O' Level yang Diperolehi</span><span class="lang-en">Number of 'O' Level Credits Obtained</span></label>
+                            <input type="number" id="calcOCredits" placeholder="cth. 4" data-ph-bm="cth. 4" data-ph-en="e.g. 4" value="4" min="0" max="12" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                            <p class="text-[11px] text-amber-300 mt-1"><span class="lang-bm">* Syarat minimum Ahli Bomba: Sekurang-kurangnya 4 kredit dalam BC-GCE O Level. Kurang daripada 4 tidak mencukupi syarat.</span><span class="lang-en">* Minimum requirement for Fire Member: At least 4 credits in BC-GCE O Level. Less than 4 is insufficient.</span></p>
+                        </div>
+                        <div id="majorField" class="hidden">
+                            <label class="block text-sm font-semibold text-gray-300 mb-1" id="majorLabel"><span class="lang-bm">Bidang / Pengkhususan Kursus</span><span class="lang-en">Field of Study / Major</span></label>
+                            <input type="text" id="calcMajor" placeholder="cth. Kejuruteraan Awam / Sains Komputer / Pengurusan" data-ph-bm="cth. Kejuruteraan Awam / Sains Komputer / Pengurusan" data-ph-en="e.g. Civil Engineering / Computer Science / Management" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
+                            <p class="text-[11px] text-gray-400 mt-1" id="majorHint"><span class="lang-bm">Sila nyatakan bidang pengkhususan kelulusan anda.</span><span class="lang-en">Please specify your field of specialization.</span></p>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateEligibility()" class="w-full bg-bombaRed hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all">
+                        <span class="lang-bm">Semak Kelayakan & Jawatan Sesuai</span><span class="lang-en">Check Eligibility & Suitable Position</span>
+                    </button>
+                </div>
+
+                <div id="calcResult" class="hidden p-5 rounded-2xl border text-center space-y-3 transition-all">
+                    <!-- Result injected via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-blue-950 border-t border-blue-900/50 mt-16 py-8 text-center text-xs text-gray-400 space-y-2">
+        <p class="font-semibold text-white"><span class="lang-bm">Disediakan oleh: Bahagian Tenaga Manusia dan Perancangan Latihan</span><span class="lang-en">Prepared by: Manpower and Training Planning Division</span></p>
+        <p><span class="lang-bm">Jabatan Bomba dan Penyelamat, Kementerian Hal Ehwal Dalam Negeri, Negara Brunei Darussalam.</span><span class="lang-en">Fire and Rescue Department, Ministry of Home Affairs, Negara Brunei Darussalam.</span></p>
+        <p class="text-bombaGold"><span class="lang-bm">Talian Kecemasan: 995 | Telefon Pejabat: 2380409 sambungan 246</span><span class="lang-en">Emergency Hotline: 995 | Office Telephone: 2380409 ext. 246</span></p>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+
+            // Show selected tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+
+            // Update button styles on desktop navigation
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                if (btn.getAttribute('data-target') === tabId) {
+                    btn.classList.remove('text-gray-300', 'hover:text-white', 'hover:bg-white/5');
+                    btn.classList.add('bg-bombaRed', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.remove('bg-bombaRed', 'text-white', 'shadow-md');
+                    btn.classList.add('text-gray-300', 'hover:text-white', 'hover:bg-white/5');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleEduExtra() {
+            const edu = document.getElementById('calcEdu').value;
+            const box = document.getElementById('eduExtraBox');
+            const oField = document.getElementById('oLevelCreditField');
+            const mField = document.getElementById('majorField');
+            const majorLabel = document.getElementById('majorLabel');
+            const majorHint = document.getElementById('majorHint');
+
+            box.classList.remove('hidden');
+            oField.classList.add('hidden');
+            mField.classList.add('hidden');
+
+            if (edu === 'olevel') {
+                oField.classList.remove('hidden');
+            } else if (edu === 'hnd') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang / Pengkhususan Diploma Tertinggi (HND in what?)</span><span class="lang-en">Field of Study (HND in what?)</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan pengkhususan HND anda (cth. Kejuruteraan Mekanikal / Sains Bangunan).</span><span class="lang-en">Specify your HND major (e.g. Mechanical Engineering / Building Studies).</span>`;
+            } else if (edu === 'hnc') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang / Pengkhususan Sijil Tertinggi (HNC in what?)</span><span class="lang-en">Field of Study (HNC in what?)</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan pengkhususan HNC anda.</span><span class="lang-en">Specify your HNC major.</span>`;
+            } else if (edu === 'ond') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang / Pengkhususan Diploma Kebangsaan (OND in what?)</span><span class="lang-en">Field of Study (OND in what?)</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan pengkhususan OND anda.</span><span class="lang-en">Specify your OND major.</span>`;
+            } else if (edu === 'degree' || edu === 'master') {
+                mField.classList.remove('hidden');
+                majorLabel.innerHTML = `<span class="lang-bm">Bidang Ijazah Sarjana Muda / Sarjana (Degree in what?)</span><span class="lang-en">Degree Major / Field of Study</span>`;
+                majorHint.innerHTML = `<span class="lang-bm">Nyatakan jurusan Ijazah Sarjana Muda anda.</span><span class="lang-en">Specify your Bachelor's / Master's degree major.</span>`;
+            }
+        }
+
+        function calculateEligibility() {
+            const gender = document.getElementById('calcGender').value;
+            const age = parseInt(document.getElementById('calcAge').value);
+            const heightCm = parseFloat(document.getElementById('calcHeight').value);
+            const weight = parseFloat(document.getElementById('calcWeight').value);
+            const edu = document.getElementById('calcEdu').value;
+            const oCredits = parseInt(document.getElementById('calcOCredits').value) || 0;
+            const majorInput = (document.getElementById('calcMajor') ? document.getElementById('calcMajor').value.trim() : '');
+            const resultBox = document.getElementById('calcResult');
+
+            resultBox.classList.remove('hidden');
+
+            if (!heightCm || !weight || !age || heightCm <= 0 || weight <= 0 || age <= 0) {
+                resultBox.className = "p-5 rounded-2xl border bg-amber-950/40 border-amber-800 text-amber-200 text-sm";
+                resultBox.innerHTML = "<h4 class='font-bold text-base'>" + T("Sila masukkan maklumat umur, tinggi, dan berat yang sah.", "Please enter valid age, height, and weight information.") + "</h4>";
+                return;
+            }
+
+            // Height and BMI Check
+            const heightM = heightCm / 100.0;
+            const minHeightCm = gender === 'male' ? 161 : 152;
+            const bmi = weight / (heightM * heightM);
+            const passedHeight = heightCm >= minHeightCm;
+            const passedBmi = bmi >= 19 && bmi <= 27;
+
+            let html = `<h4 class='font-bold text-lg mb-2 text-white'>${T('Keputusan Semakan Kelayakan:','Eligibility Check Results:')}</h4>`;
+            html += `<div class='grid grid-cols-2 gap-2 text-xs bg-black/30 p-3 rounded-xl border border-blue-900/50 mb-3 text-left'>`;
+            html += `<div>• ${T('Ketinggian','Height')}: <strong class='text-white'>${heightCm} cm</strong> (${passedHeight ? T('✅ Lulus', '✅ Passed') : T('❌ Kurang min ' + minHeightCm + 'cm', '❌ Below min ' + minHeightCm + 'cm')})</div>`;
+            html += `<div>• BMI: <strong class='text-white'>${bmi.toFixed(2)}</strong> (${passedBmi ? T('✅ 19-27 (Ideal)', '✅ 19-27 (Ideal)') : '❌ ' + (bmi < 19 ? T('Terlalu Rendah', 'Too Low') : T('Terlalu Tinggi', 'Too High'))})</div>`;
+            if (edu === 'olevel') {
+                html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>BC-GCE 'O' Level (${oCredits} ${T('Kredit', 'Credits')})</strong></div>`;
+            } else if (majorInput) {
+                html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>${edu.toUpperCase()} (${majorInput})</strong></div>`;
+            }
+            html += `</div>`;
+
+            let eligiblePositions = [];
+            let academicIssueMsg = "";
+
+            if (edu === 'master' || edu === 'degree') {
+                if (age >= 18 && age <= 35) {
+                    eligiblePositions.push({ name: T('Penguasa Bomba Dan Penyelamat (Bahagian II)', 'Superintendent of Fire and Rescue (Division II)'), badge: 'bg-bombaRed text-white' });
+                    eligiblePositions.push({ name: T('Timbalan Penguasa Bomba Dan Penyelamat (Bahagian III)', 'Deputy Superintendent of Fire and Rescue (Division III)'), badge: 'bg-bombaGold text-bombaBlue' });
+                } else {
+                    academicIssueMsg = T('Umur anda (18-35 tahun diperlukan) tidak memenuhi syarat untuk jawatan Penguasa / Timbalan Penguasa.', 'Your age (18-35 years required) does not meet the requirement for Superintendent / Deputy Superintendent.');
+                }
+            } else if (edu === 'hnd') {
+                if (age >= 18 && age <= 35) {
+                    eligiblePositions.push({ name: T('Timbalan Penguasa Bomba Dan Penyelamat (Bahagian III)', 'Deputy Superintendent of Fire and Rescue (Division III)'), badge: 'bg-bombaGold text-bombaBlue' });
+                }
+                if (age >= 18 && age <= 32) {
+                    eligiblePositions.push({ name: T('Penolong Penguasa Bomba Dan Penyelamat (Bahagian III)', 'Assistant Superintendent of Fire and Rescue (Division III)'), badge: 'bg-bombaRed text-white' });
+                }
+                if (eligiblePositions.length === 0) {
+                    academicIssueMsg = T('Umur anda tidak memenuhi julat umur bagi kelayakan HND.', 'Your age does not match the range for HND qualification.');
+                }
+            } else if (edu === 'hnc') {
+                if (age >= 18 && age <= 32) {
+                    eligiblePositions.push({ name: T('Penolong Penguasa Bomba Dan Penyelamat (Bahagian III)', 'Assistant Superintendent of Fire and Rescue (Division III)'), badge: 'bg-bombaRed text-white' });
+                } else {
+                    academicIssueMsg = T('Umur anda (18-32 tahun diperlukan) tidak memenuhi syarat untuk Penolong Penguasa.', 'Your age (18-32 years required) does not meet the requirement for Assistant Superintendent.');
+                }
+            } else if (edu === 'ond') {
+                if (age >= 18 && age <= 30) {
+                    eligiblePositions.push({ name: T('Pegawai Balai (Bahagian III)', 'Station Officer (Division III)'), badge: 'bg-bombaGold text-bombaBlue' });
+                }
+                if (age >= 18 && age <= 26) {
+                    eligiblePositions.push({ name: T('Timbalan Pegawai Balai (Bahagian IV)', 'Deputy Station Officer (Division IV)'), badge: 'bg-bombaRed text-white' });
+                }
+                if (eligiblePositions.length === 0) {
+                    academicIssueMsg = T('Umur anda tidak memenuhi julat umur (18-30 untuk Pegawai Balai atau 18-26 untuk Timbalan Pegawai Balai).', 'Your age does not match the range (18-30 for Station Officer or 18-26 for Deputy Station Officer).');
+                }
+            } else if (edu === 'olevel') {
+                if (oCredits >= 4) {
+                    if (age >= 18 && age <= 26) {
+                        eligiblePositions.push({ name: T('Ahli Bomba Dan Penyelamat (Bahagian IV)', 'Fire and Rescue Member (Division IV)'), badge: 'bg-bombaGold text-bombaBlue' });
+                    } else {
+                        academicIssueMsg = T('Umur anda mesti di antara 18 hingga 26 tahun untuk jawatan Ahli Bomba.', 'Your age must be between 18 and 26 years for Fire Member.');
+                    }
+                } else {
+                    academicIssueMsg = T(`Kelayakan O-Level anda (${oCredits} kredit) tidak mencukupi syarat minimum 4 kredit untuk jawatan Ahli Bomba.`, `Your O-Level qualification (${oCredits} credits) is insufficient as a minimum of 4 credits is required for Fire Member.`);
+                }
+            }
+
+            const physicalPassed = passedHeight && passedBmi;
+
+            if (physicalPassed && eligiblePositions.length > 0) {
+                resultBox.className = "p-5 rounded-2xl border bg-emerald-950/45 border-emerald-800 text-emerald-200 text-sm space-y-2 text-left";
+                html += `<div class='p-3 bg-emerald-900/40 rounded-xl border border-emerald-700/50'>`;
+                html += `<p class='font-bold text-white text-base mb-1'>🎉 ${T('Tahniah! Anda memenuhi syarat fizikal dan layak memohon jawatan berikut:','Congratulations! You meet physical requirements and are eligible for:')}</p>`;
+                html += `<ul class='space-y-1.5 mt-2'>`;
+                eligiblePositions.forEach(p => {
+                    html += `<li class='flex items-center gap-2'><span class='w-2 h-2 rounded-full bg-bombaGold'></span><strong class='text-white'>${p.name}</strong></li>`;
+                });
+                html += `</ul></div>`;
+            } else {
+                resultBox.className = "p-5 rounded-2xl border bg-red-950/45 border-red-800 text-red-200 text-sm space-y-2 text-left";
+                html += `<div class='p-3 bg-red-900/40 rounded-xl border border-red-700/50 space-y-1'>`;
+                html += `<p class='font-bold text-white text-base'>⚠️ ${T('Maaf, anda tidak melepasi semua kriteria kelayakan asas.','Sorry, you did not pass all basic eligibility criteria.')}</p>`;
+                if (!physicalPassed) {
+                    html += `<p class='text-xs'>• ${T('Fizikal: Sila pastikan tinggi dan BMI (19-27) mematuhi syarat.', 'Physical: Ensure height and BMI (19-27) meet requirements.')}</p>`;
+                }
+                if (academicIssueMsg) {
+                    html += `<p class='text-xs text-amber-300 font-semibold'>• ${academicIssueMsg}</p>`;
+                } else if (eligiblePositions.length === 0) {
+                    html += `<p class='text-xs'>• ${T('Kelulusan atau umur anda tidak sepadan dengan syarat kemasukan jawatan yang ada.', 'Your qualification or age does not match the available position criteria.')}</p>`;
+                }
+                html += `</div>`;
+            }
+
+            resultBox.innerHTML = html;
+        }
+
+        // ---------- Language toggle (BM / EN) ----------
+        let currentLang = 'bm';
+        const T = (bm, en) => currentLang === 'en' ? en : bm;
+        const TITLES = { bm: 'Portal Pengambilan Jabatan Bomba dan Penyelamat Brunei', en: 'Recruitment Portal - Brunei Fire and Rescue Department' };
+
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function openRank(src, alt) {
+            const modal = document.getElementById('rankModal');
+            const img = document.getElementById('rankModalImg');
+            const cap = document.getElementById('rankModalCap');
+            if (modal && img && cap) {
+                img.src = src;
+                img.alt = alt;
+                cap.textContent = alt;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeRank() {
+            const modal = document.getElementById('rankModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const root = document.documentElement;
+            root.setAttribute('data-lang', lang);
+            root.lang = lang === 'en' ? 'en' : 'ms';
+            document.title = TITLES[lang];
+            document.querySelectorAll('option[data-en]').forEach(o => { o.textContent = lang === 'en' ? o.dataset.en : o.dataset.bm; });
+            document.querySelectorAll('[data-alt-en]').forEach(i => { i.alt = lang === 'en' ? i.dataset.altEn : i.dataset.altBm; });
+            document.querySelectorAll('[data-ph-en]').forEach(i => { i.placeholder = lang === 'en' ? i.dataset.phEn : i.dataset.phBm; });
+            ['bm', 'en'].forEach(l => {
+                const b = document.getElementById('lang-' + l);
+                if (!b) return;
+                const on = l === lang;
+                b.classList.toggle('bg-bombaGold', on);
+                b.classList.toggle('text-bombaBlue', on);
+                b.classList.toggle('text-gray-300', !on);
+            });
+            try { localStorage.setItem('bombaLang', lang); } catch (e) {}
+            const rb = document.getElementById('calcResult');
+            if (rb && !rb.classList.contains('hidden')) calculateEligibility();
+        }
+
+        (function initLang() {
+            let saved = 'bm';
+            try { saved = localStorage.getItem('bombaLang') || 'bm'; } catch (e) {}
+            setLang(saved === 'en' ? 'en' : 'bm');
+            toggleEduExtra();
+        })();
+    </script>
+</body>
+</html>
