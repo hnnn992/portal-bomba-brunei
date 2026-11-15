@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
     <style>
         body {
             background-color: #040b17;
@@ -31,7 +31,7 @@
             <div>
                 <h1 class="text-xs font-black tracking-wider uppercase text-slate-100">BFRD Remote Clicker</h1>
                 <p id="statusTxt" class="text-[10px] text-amber-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Menyambung ke skrin komputer...
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span> Menyambung ke skrin komputer...
                 </p>
             </div>
         </div>
@@ -46,10 +46,10 @@
     <!-- Manual Room ID Box (Fallback if URL query parameter was not passed) -->
     <div id="manualIdCard" class="hidden my-3 p-3 rounded-2xl bg-slate-900/90 border border-amber-500/30 text-center shadow-lg">
         <div class="text-[11px] font-bold text-amber-300 mb-1.5 flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-key"></i> <span>Masukkan Kod ID Komputer:</span>
+            <i class="fa-solid fa-key"></i> <span>Masukkan Kod ID Bilik Komputer:</span>
         </div>
         <div class="flex gap-2">
-            <input type="text" id="manualIdInput" placeholder="Contoh: kod ID bilik..." class="flex-1 px-3 py-1.5 text-xs rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400">
+            <input type="text" id="manualIdInput" placeholder="Contoh: BFRD-1234" class="flex-1 px-3 py-1.5 text-xs rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 uppercase text-center font-bold tracking-wider">
             <button onclick="connectWithManualId()" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl">Sambung</button>
         </div>
     </div>
@@ -106,7 +106,7 @@
         <a href="presentation.html" class="text-[10px] text-slate-400 hover:text-white underline">Buka Slaid Penuh</a>
     </footer>
 
-    <!-- PeerJS Connection Logic (All bugs fixed: intentionalDisconnect, auto-reconnect, delayed destroy) -->
+    <!-- Rock-Solid WebSocket Real-Time Connection Logic (Zero Emojis, Works on Any Network/4G/5G) -->
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         let currentTargetId = urlParams.get('id');
@@ -119,30 +119,24 @@
         const manualIdCard = document.getElementById('manualIdCard');
         const manualIdInput = document.getElementById('manualIdInput');
 
-        let peer = null;
-        let conn = null;
+        let mqttClient = null;
         let isConnected = false;
+        let isIntentionalDisconnect = false;
         let connectTimeout = null;
-        let intentionalDisconnect = false; // flag to suppress false error UI on user-initiated disconnect
-        let autoReconnectTimer = null;
 
-        const peerConfig = {
-            config: {
-                iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' }
-                ]
-            }
-        };
+        const BROKERS = [
+            { host: "broker.hivemq.com", port: 8884, path: "/mqtt" },
+            { host: "broker.emqx.io", port: 8084, path: "/mqtt" }
+        ];
+        let currentBrokerIndex = 0;
 
         function startConnection() {
-            clearTimeout(autoReconnectTimer);
-            intentionalDisconnect = false;
+            isIntentionalDisconnect = false;
+            clearTimeout(connectTimeout);
 
             if (!currentTargetId) {
                 statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
-                statusTxt.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Sila masukkan Kod ID Bilik di bawah:';
+                statusTxt.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-400"></i> Sila masukkan Kod ID Bilik di bawah:';
                 manualIdCard.classList.remove('hidden');
                 btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 transition-all flex items-center gap-1.5 shadow-md";
                 btnDisconnectIcon.className = "fa-solid fa-plug text-[11px] text-emerald-400";
@@ -150,129 +144,117 @@
                 return;
             }
 
-            // Only show manual card if ID not already known
-            if (currentTargetId) {
-                manualIdCard.classList.add('hidden');
-            }
-
+            manualIdCard.classList.add('hidden');
             statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
-            statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span> Menyambung ke skrin komputer...';
+            statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block mr-1"></span> Menyambung ke skrin komputer...';
             iconStatus.className = "w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm shadow-lg";
             btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md";
             btnDisconnectIcon.className = "fa-solid fa-power-off text-[11px] text-red-400";
             btnDisconnectText.textContent = "Putuskan (Disconnect)";
 
-            if (peer && !peer.destroyed) {
-                try { peer.destroy(); } catch(e) {}
+            if (mqttClient && mqttClient.isConnected()) {
+                try { mqttClient.disconnect(); } catch(e) {}
             }
 
-            peer = new Peer(peerConfig);
+            const broker = BROKERS[currentBrokerIndex];
+            const clientId = "bfrd_remote_" + Math.random().toString(16).substr(2, 8);
+            mqttClient = new Paho.MQTT.Client(broker.host, broker.port, broker.path, clientId);
 
-            peer.on('open', () => {
-                attemptConnect();
-            });
-
-            peer.on('error', (err) => {
-                if (intentionalDisconnect) return; // suppress error UI on user-initiated disconnect
-                console.error("PeerJS error:", err);
-                statusTxt.className = "text-[10px] text-red-400 font-semibold flex items-center gap-1.5";
-                statusTxt.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Ralat sambungan (' + err.type + '). Sila cuba lagi.';
-                setDisconnectedUI(false);
-            });
-        }
-
-        function attemptConnect() {
-            if (!peer || peer.destroyed) return;
-
-            conn = peer.connect(currentTargetId, { reliable: true });
-
-            clearTimeout(connectTimeout);
-            connectTimeout = setTimeout(() => {
-                if (!isConnected) {
-                    statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
-                    statusTxt.innerHTML = '<i class="fa-solid fa-circle-info"></i> Masih menyambung... Pastikan tetingkap QR di komputer masih terbuka.';
-                }
-            }, 8000);
-
-            conn.on('open', () => {
-                clearTimeout(connectTimeout);
-                isConnected = true;
-                statusTxt.className = "text-[10px] text-emerald-400 font-bold flex items-center gap-1.5";
-                statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Tersambung dengan Skrin Komputer!';
-                iconStatus.className = "w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-sm shadow-lg shadow-emerald-950";
-                btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md";
-                btnDisconnectIcon.className = "fa-solid fa-power-off text-[11px] text-red-400";
-                btnDisconnectText.textContent = "Putuskan (Disconnect)";
-                if (navigator.vibrate) navigator.vibrate(50);
-            });
-
-            conn.on('close', () => {
-                clearTimeout(connectTimeout);
-                if (!intentionalDisconnect) {
-                    // Unexpected drop — show reconnecting state and auto-retry after 4 seconds
+            mqttClient.onConnectionLost = function(responseObject) {
+                if (!isIntentionalDisconnect) {
+                    console.warn("MQTT connection lost:", responseObject.errorMessage);
                     setDisconnectedUI(false);
-                    statusTxt.innerHTML = '<i class="fa-solid fa-rotate"></i> Sambungan terputus. Cuba semula dalam 4 saat...';
-                    autoReconnectTimer = setTimeout(() => {
-                        if (!intentionalDisconnect && currentTargetId) {
+                    // Auto reconnect after 3 seconds
+                    setTimeout(() => {
+                        if (!isIntentionalDisconnect && currentTargetId) {
                             startConnection();
                         }
-                    }, 4000);
-                } else {
-                    setDisconnectedUI(true);
+                    }, 3000);
                 }
-            });
+            };
 
-            conn.on('error', (err) => {
-                clearTimeout(connectTimeout);
-                if (!intentionalDisconnect) {
-                    console.error("Connection error:", err);
-                    setDisconnectedUI(false);
+            mqttClient.onMessageArrived = function(message) {
+                try {
+                    const data = JSON.parse(message.payloadString);
+                    if (data.status === 'online' || data.status === 'ready') {
+                        setConnectedUI();
+                    }
+                } catch(e) {}
+            };
+
+            const options = {
+                useSSL: true,
+                timeout: 6,
+                keepAliveInterval: 30,
+                cleanSession: true,
+                onSuccess: function() {
+                    console.log("Connected to broker:", broker.host);
+                    // Subscribe to host status
+                    const statusTopic = "bfrd/room/" + currentTargetId + "/status";
+                    mqttClient.subscribe(statusTopic, { qos: 1 });
+
+                    // Send ping to host
+                    sendCommand({ action: 'ping' });
+
+                    // Mark as connected
+                    setConnectedUI();
+                },
+                onFailure: function(err) {
+                    console.error("Broker connection failed:", err);
+                    // Try next broker
+                    currentBrokerIndex = (currentBrokerIndex + 1) % BROKERS.length;
+                    if (!isIntentionalDisconnect) {
+                        setTimeout(startConnection, 1500);
+                    }
                 }
-            });
+            };
+
+            try {
+                mqttClient.connect(options);
+            } catch(e) {
+                console.error("MQTT client error:", e);
+                setDisconnectedUI(false);
+            }
         }
 
-        // showManual: whether to show the manual ID card after disconnect
+        function setConnectedUI() {
+            isConnected = true;
+            statusTxt.className = "text-[10px] text-emerald-400 font-bold flex items-center gap-1.5";
+            statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1"></span> Tersambung dengan Skrin Komputer!';
+            iconStatus.className = "w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-sm shadow-lg shadow-emerald-950";
+            btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md";
+            btnDisconnectIcon.className = "fa-solid fa-power-off text-[11px] text-red-400";
+            btnDisconnectText.textContent = "Putuskan (Disconnect)";
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
         function setDisconnectedUI(showManual) {
             isConnected = false;
             statusTxt.className = "text-[10px] text-red-400 font-semibold flex items-center gap-1.5";
-            statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span> Sambungan Terputus (Disconnected).';
+            statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400 inline-block mr-1"></span> Sambungan Terputus (Disconnected).';
             iconStatus.className = "w-9 h-9 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-bold text-sm shadow-lg";
             btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 transition-all flex items-center gap-1.5 shadow-md";
             btnDisconnectIcon.className = "fa-solid fa-plug text-[11px] text-emerald-400";
             btnDisconnectText.textContent = "Sambung Semula (Reconnect)";
-            // Only reveal manual ID input if ID is not already known from URL
             if (showManual || !currentTargetId) {
                 manualIdCard.classList.remove('hidden');
             }
         }
 
         function handleDisconnectClick() {
-            if (isConnected || (conn && conn.open)) {
-                // User clicked Disconnect — set flag BEFORE closing to suppress error handler
-                intentionalDisconnect = true;
-                clearTimeout(autoReconnectTimer);
-                clearTimeout(connectTimeout);
-                if (conn) { try { conn.close(); } catch(e) {} }
-                // Delay peer.destroy() slightly so conn.close() signal can reach the host
-                setTimeout(() => {
-                    if (peer) { try { peer.destroy(); } catch(e) {} }
-                }, 150);
-                setDisconnectedUI(true);
-            } else if (peer && !peer.destroyed) {
-                // Mid-connecting — cancel and disconnect
-                intentionalDisconnect = true;
-                clearTimeout(autoReconnectTimer);
-                clearTimeout(connectTimeout);
-                if (peer) { try { peer.destroy(); } catch(e) {} }
-                setDisconnectedUI(true);
+            if (isConnected || (mqttClient && mqttClient.isConnected())) {
+                isIntentionalDisconnect = true;
+                if (mqttClient) {
+                    try { mqttClient.disconnect(); } catch(e) {}
+                }
+                setDisconnectedUI(false);
             } else {
-                // User clicked Reconnect
                 startConnection();
             }
         }
 
         function connectWithManualId() {
-            const val = manualIdInput.value.trim();
+            const val = manualIdInput.value.trim().toUpperCase();
             if (val) {
                 currentTargetId = val;
                 startConnection();
@@ -280,14 +262,21 @@
         }
 
         function sendCommand(data) {
-            if (conn && conn.open) {
-                conn.send(data);
-                if (navigator.vibrate) navigator.vibrate(25);
+            if (mqttClient && mqttClient.isConnected() && currentTargetId) {
+                try {
+                    const message = new Paho.MQTT.Message(JSON.stringify(data));
+                    message.destinationName = "bfrd/room/" + currentTargetId + "/cmd";
+                    message.qos = 1;
+                    mqttClient.send(message);
+                    if (navigator.vibrate) navigator.vibrate(25);
+                } catch(e) {
+                    console.error("Send error:", e);
+                }
             } else {
-                // Flash a brief warning in the status bar instead of blocking alert
+                // Flash status bar warning
                 const prevHtml = statusTxt.innerHTML;
                 const prevClass = statusTxt.className;
-                statusTxt.className = "text-[10px] text-orange-400 font-semibold flex items-center gap-1.5";
+                statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
                 statusTxt.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Belum tersambung. Tekan Sambung Semula.';
                 setTimeout(() => {
                     statusTxt.className = prevClass;
@@ -296,7 +285,7 @@
             }
         }
 
-        // Auto start connection if id is present in URL
+        // Auto start connection if id is in URL
         startConnection();
     </script>
 </body>

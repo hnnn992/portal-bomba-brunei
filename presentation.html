@@ -968,7 +968,7 @@ function closeInteractiveSlides() {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Career Briefing & Entry Requirements - BFRD Brunei</title>
 <!--INJECT-CSS-->
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"><\/script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
 <style>
 :root{--bg:#050b14;--card:rgba(10,24,48,.88);--red:#d91b1b;--red2:#8b0c0c;--gold:#fbbf24;--sub:#94a3b8}
@@ -1354,116 +1354,141 @@ st.addEventListener('touchend',function(e){if(mi>=0)return;var dx=e.changedTouch
 if(Math.abs(dx)>70&&Math.abs(dy)<45){gotoSlide((cur+(dx<0?1:-1)+cards.length)%cards.length)}},{passive:true});})();
 <\/script>
 <script>
-let hostPeer = null;
-let activeConn = null;
+let mqttHostClient = null;
+let currentRoomId = null;
+let isHostConnected = false;
 
-const peerIceConfig = {
-  config: {
-    iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' },
-      { urls: 'stun:stun2.l.google.com:19302' }
-    ]
-  }
-};
+const BROKERS = [
+  { host: "broker.hivemq.com", port: 8884, path: "/mqtt" },
+  { host: "broker.emqx.io", port: 8084, path: "/mqtt" }
+];
+let currentBrokerIdx = 0;
 
 function toggleRemoteModal() {
   const modal = document.getElementById('remoteModal');
   if (!modal) return;
   const isShown = modal.style.display === 'flex';
   modal.style.display = isShown ? 'none' : 'flex';
-  if (!isShown && (hostPeer === null || hostPeer.destroyed)) {
-    initHostPeer();
+  if (!isShown) {
+    initHostRemote();
   }
 }
 
-function initHostPeer() {
+function initHostRemote() {
   const statusEl = document.getElementById('remotePeerStatus');
-  if (hostPeer && !hostPeer.destroyed) return;
+  const qrBox = document.getElementById('qrcodeBox');
 
+  // Generate clean room code once (e.g. BFRD-7821)
+  if (!currentRoomId) {
+    currentRoomId = "BFRD-" + Math.floor(1000 + Math.random() * 9000);
+  }
+
+  // Determine correct public remoteUrl
+  let origin = window.location.origin;
+  let pathname = window.location.pathname;
   try {
-    if (statusEl) {
-      statusEl.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menjana kod sambungan...';
-      statusEl.style.color = '#38bdf8';
+    if (window.parent && window.parent.location && window.parent.location.origin) {
+      origin = window.parent.location.origin;
+      pathname = window.parent.location.pathname;
     }
+  } catch (e) {}
 
-    hostPeer = new Peer(peerIceConfig);
+  let baseUrl = origin + pathname;
+  if (baseUrl.endsWith('presentation.html')) {
+    baseUrl = baseUrl.replace('presentation.html', 'remote.html');
+  } else if (baseUrl.endsWith('/')) {
+    baseUrl = baseUrl + 'remote.html';
+  } else {
+    baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1) + 'remote.html';
+  }
 
-    hostPeer.on('open', (id) => {
-      let origin = window.location.origin;
-      let pathname = window.location.pathname;
-      try {
-        if (window.parent && window.parent.location && window.parent.location.origin) {
-          origin = window.parent.location.origin;
-          pathname = window.parent.location.pathname;
-        }
-      } catch (e) {}
+  const remoteUrl = baseUrl + '?id=' + currentRoomId;
 
-      let baseUrl = origin + pathname;
-      if (baseUrl.endsWith('presentation.html')) {
-        baseUrl = baseUrl.replace('presentation.html', 'remote.html');
-      } else if (baseUrl.endsWith('/')) {
-        baseUrl = baseUrl + 'remote.html';
-      } else {
-        baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1) + 'remote.html';
-      }
-
-      const remoteUrl = baseUrl + '?id=' + id;
-      const qrBox = document.getElementById('qrcodeBox');
-      if (qrBox) {
-        qrBox.innerHTML = '';
-        new QRCode(qrBox, {
-          text: remoteUrl,
-          width: 170,
-          height: 170,
-          colorDark: '#050b14',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      }
-      if (statusEl) {
-        statusEl.innerHTML = '<span style="color:#34d399;font-weight:700;"><i class="fa-solid fa-circle" style="font-size:9px;"></i> Sedia Diimbas</span><br><span style="font-size:11px;color:#94a3b8;">ID: ' + id + '</span>';
-      }
+  // Render QR Code
+  if (qrBox && qrBox.children.length === 0) {
+    qrBox.innerHTML = '';
+    new QRCode(qrBox, {
+      text: remoteUrl,
+      width: 170,
+      height: 170,
+      colorDark: '#050b14',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
     });
+  }
 
-    hostPeer.on('connection', (conn) => {
-      // Close any existing connection before accepting new one (prevents double commands)
-      if (activeConn && activeConn.open) {
-        try { activeConn.close(); } catch(e) {}
-      }
-      activeConn = conn;
+  if (statusEl && !isHostConnected) {
+    statusEl.innerHTML = '<span style="color:#34d399;font-weight:700;"><i class="fa-solid fa-circle" style="font-size:9px;"></i> Sedia Diimbas</span><br><span style="font-size:13px;color:#fbbf24;font-weight:bold;letter-spacing:1.5px;">Kod: ' + currentRoomId + '</span>';
+  }
+
+  if (mqttHostClient && mqttHostClient.isConnected()) {
+    sendHostStatus();
+    return;
+  }
+
+  connectHostBroker();
+}
+
+function connectHostBroker() {
+  const statusEl = document.getElementById('remotePeerStatus');
+  const broker = BROKERS[currentBrokerIdx];
+  const clientId = "bfrd_host_" + Math.random().toString(16).substr(2, 8);
+
+  mqttHostClient = new Paho.MQTT.Client(broker.host, broker.port, broker.path, clientId);
+
+  mqttHostClient.onConnectionLost = function(resp) {
+    isHostConnected = false;
+    console.warn("Host MQTT lost:", resp.errorMessage);
+    setTimeout(connectHostBroker, 3000);
+  };
+
+  mqttHostClient.onMessageArrived = function(message) {
+    try {
+      const data = JSON.parse(message.payloadString);
+      handleRemoteCommand(data);
+      // Update status to connected
       if (statusEl) {
         statusEl.innerHTML = '<span style="color:#34d399;font-weight:700;font-size:14px;"><i class="fa-solid fa-circle-check"></i> Telefon Tersambung (Connected)</span><br><span style="font-size:11px;color:#cbd5e1;">Alat kawalan jauh telefon kini aktif.</span>';
       }
-
-      conn.on('data', (data) => {
-        handleRemoteCommand(data);
-      });
-
-      conn.on('close', () => {
-        activeConn = null;
-        if (statusEl) {
-          statusEl.innerHTML = '<span style="color:#f87171;font-weight:600;"><i class="fa-solid fa-circle-info"></i> Sambungan telefon terputus.</span><br><span style="font-size:11px;color:#94a3b8;">Imbas semula atau tekan Sambung Semula di telefon.</span>';
-        }
-      });
-
-      conn.on('error', (err) => {
-        console.error('Peer connection error:', err);
-      });
-    });
-
-    hostPeer.on('error', (err) => {
-      console.error('PeerJS error:', err);
-      hostPeer = null; // null out so toggleRemoteModal() can re-init cleanly
-      if (statusEl) {
-        statusEl.innerHTML = '<span style="color:#f87171;"><i class="fa-solid fa-circle-exclamation"></i> Ralat sambungan (' + err.type + '). Sila tutup dan buka semula tetingkap QR.</span>';
-      }
-    });
-  } catch (e) {
-    console.error('Peer exception:', e);
-    if (statusEl) {
-      statusEl.innerHTML = '<span style="color:#f87171;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuatkan sistem remote.</span>';
+      sendHostStatus();
+    } catch(e) {
+      console.error("Message parse error:", e);
     }
+  };
+
+  const options = {
+    useSSL: true,
+    timeout: 6,
+    keepAliveInterval: 30,
+    cleanSession: true,
+    onSuccess: function() {
+      isHostConnected = true;
+      console.log("Host connected to MQTT:", broker.host);
+      mqttHostClient.subscribe("bfrd/room/" + currentRoomId + "/cmd", { qos: 1 });
+      sendHostStatus();
+    },
+    onFailure: function(err) {
+      console.error("Host connect failed to:", broker.host, err);
+      currentBrokerIdx = (currentBrokerIdx + 1) % BROKERS.length;
+      setTimeout(connectHostBroker, 2000);
+    }
+  };
+
+  try {
+    mqttHostClient.connect(options);
+  } catch(e) {
+    console.error("MQTT Host error:", e);
+  }
+}
+
+function sendHostStatus() {
+  if (mqttHostClient && mqttHostClient.isConnected() && currentRoomId) {
+    try {
+      const msg = new Paho.MQTT.Message(JSON.stringify({ status: 'online', slide: (typeof cur === 'number') ? cur : 0 }));
+      msg.destinationName = "bfrd/room/" + currentRoomId + "/status";
+      msg.qos = 1;
+      mqttHostClient.send(msg);
+    } catch(e) {}
   }
 }
 
