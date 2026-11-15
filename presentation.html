@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brunei Fire and Rescue Department</title>
@@ -1353,153 +1351,21 @@ st.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touche
 st.addEventListener('touchend',function(e){if(mi>=0)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
 if(Math.abs(dx)>70&&Math.abs(dy)<45){gotoSlide((cur+(dx<0?1:-1)+cards.length)%cards.length)}},{passive:true});})();
 <\/script>
-
-    <!-- Phone Remote QR Modal -->
-    <div id="remoteQrModal" style="display:none;position:fixed;inset:0;background:rgba(4,11,23,0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:100000;align-items:center;justify-content:center;padding:1.5rem;" onclick="if(event.target===this)toggleRemoteModal()">
-        <div style="background:#0b162c;border:1px solid rgba(245,158,11,0.4);border-radius:1.5rem;padding:2rem;max-width:22rem;width:100%;text-align:center;color:#fff;box-shadow:0 20px 50px rgba(0,0,0,0.6);" onclick="event.stopPropagation()">
-            <div style="font-size:1.5rem;color:#f59e0b;margin-bottom:0.5rem;"><i class="fa-solid fa-qrcode"></i></div>
-            <h3 style="font-size:1.1rem;font-weight:800;margin:0 0 0.25rem 0;">Kawalan Jauh Telefon</h3>
-            <p style="font-size:0.75rem;color:#94a3b8;margin:0 0 1.25rem 0;">Imbas kod QR ini menggunakan telefon anda untuk mengawal pembentangan ini dari jauh tanpa wayar.</p>
-            
-            <div id="remoteQrCanvas" style="display:inline-block;padding:0.75rem;background:#fff;border-radius:1rem;margin-bottom:1rem;min-height:160px;min-width:160px;"></div>
-            
-            <div id="remoteStatusText" style="font-size:0.75rem;color:#38bdf8;font-weight:600;margin-bottom:1.25rem;">Menjana kod sambungan...</div>
-            
-            <button type="button" onclick="toggleRemoteModal()" style="width:100%;padding:0.6rem;background:#1e293b;border:1px solid #334155;border-radius:0.75rem;color:#cbd5e1;font-size:0.8rem;font-weight:700;cursor:pointer;">Tutup</button>
-        </div>
-    </div>
-
-    <!-- Remote & Touch Swipe Controller Script -->
+<!-- Live Peer-to-Peer Phone Remote Controller Receiver -->
     <script>
         let hostPeer = null;
         let activeConn = null;
         let qrGenerated = false;
 
-        function toggleRemoteModal() {
-            const m = document.getElementById('remoteQrModal');
-            if (m.style.display === 'flex') {
-                m.style.display = 'none';
-            } else {
-                m.style.display = 'flex';
-                initHostPeer();
+        const peerIceConfig = {
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' }
+                ]
             }
-        }
-
-        function initHostPeer() {
-            if (hostPeer && !hostPeer.destroyed) return;
-            const statusEl = document.getElementById('remoteStatusText');
-            statusEl.textContent = "Menjana kod sambungan...";
-
-            hostPeer = new Peer();
-
-            hostPeer.on('open', (peerId) => {
-                const remoteUrl = window.location.origin + window.location.pathname.replace('presentation.html', 'remote.html') + '?id=' + peerId;
-                const qrBox = document.getElementById('remoteQrCanvas');
-                qrBox.innerHTML = '';
-                new QRCode(qrBox, {
-                    text: remoteUrl,
-                    width: 150,
-                    height: 150,
-                    correctLevel: QRCode.CorrectLevel.M
-                });
-                statusEl.textContent = "Sedia! Imbas QR dengan kamera telefon anda.";
-            });
-
-            hostPeer.on('connection', (conn) => {
-                activeConn = conn;
-                statusEl.textContent = "✅ Telefon berjaya disambung!";
-                statusEl.style.color = "#4ade80";
-
-                conn.on('data', (data) => {
-                    handleRemoteData(data);
-                });
-
-                // Send current slide index to phone
-                if (typeof cur === 'number') {
-                    conn.send({ slideIndex: cur });
-                }
-            });
-
-            hostPeer.on('error', (err) => {
-                console.error('Peer error:', err);
-                statusEl.textContent = "Ralat: " + err.type;
-                statusEl.style.color = "#f87171";
-            });
-        }
-
-        function handleRemoteData(data) {
-            if (!data) return;
-            if (data.action === 'next') {
-                if (typeof next === 'function') next();
-                if (typeof cur === 'number' && typeof gotoSlide === 'function') gotoSlide(cur + 1);
-            } else if (data.action === 'prev') {
-                if (typeof prev === 'function') prev();
-                if (typeof cur === 'number' && typeof gotoSlide === 'function') gotoSlide(cur - 1);
-            } else if (data.action === 'goto' && typeof data.index === 'number') {
-                if (typeof gotoSlide === 'function') gotoSlide(data.index);
-            } else if (data.action === 'openRank' && typeof data.rank === 'number') {
-                if (typeof openRank === 'function') openRank(data.rank);
-            } else if (data.action === 'closeRank') {
-                if (typeof closeRank === 'function') closeRank();
-            } else if (data.action === 'lang') {
-                if (typeof setLanguage === 'function') {
-                    setLanguage(typeof lang !== 'undefined' && lang === 'ms' ? 'en' : 'ms');
-                }
-            } else if (data.action === 'top') {
-                const st = document.getElementById('stage');
-                if (st) st.scrollTop = 0;
-            }
-
-            // Sync back to phone
-            if (activeConn && activeConn.open && typeof cur === 'number') {
-                activeConn.send({ slideIndex: cur });
-            }
-        }
-
-        /* ---------- KAEDAH 2: SWIPE GESTURE PADA TELEFON / TABLET ---------- */
-        (function initTouchSwipe() {
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let touchStartY = 0;
-            let touchEndY = 0;
-
-            const targetArea = document.body;
-
-            targetArea.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-
-            targetArea.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                handleSwipeGesture();
-            }, { passive: true });
-
-            function handleSwipeGesture() {
-                const diffX = touchEndX - touchStartX;
-                const diffY = touchEndY - touchStartY;
-
-                // Only horizontal swipe if not scrolling vertically
-                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
-                    if (diffX < 0) {
-                        // Swipe Kiri -> Next Slide
-                        if (typeof cur === 'number' && typeof gotoSlide === 'function') gotoSlide(cur + 1);
-                        if (typeof next === 'function') next();
-                    } else {
-                        // Swipe Kanan -> Prev Slide
-                        if (typeof cur === 'number' && typeof gotoSlide === 'function') gotoSlide(cur - 1);
-                        if (typeof prev === 'function') prev();
-                    }
-                }
-            }
-        })();
-    </script>
-
-<script>
-        /* ---------- LIVE PEER-TO-PEER PHONE REMOTE LOGIC ---------- */
-        let hostPeer = null;
-        let qrGenerated = false;
+        };
 
         function toggleRemoteModal() {
             const modal = document.getElementById('remoteModal');
@@ -1507,74 +1373,113 @@ if(Math.abs(dx)>70&&Math.abs(dy)<45){gotoSlide((cur+(dx<0?1:-1)+cards.length)%ca
             const isShown = modal.style.display === 'flex';
             modal.style.display = isShown ? 'none' : 'flex';
 
-            if (!isShown && !hostPeer) {
+            if (!isShown && (!hostPeer || hostPeer.destroyed)) {
                 initHostPeer();
             }
         }
 
         function initHostPeer() {
             const statusEl = document.getElementById('remotePeerStatus');
+            if (hostPeer && !hostPeer.destroyed) return;
+
             try {
-                hostPeer = new Peer();
+                if (statusEl) {
+                    statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menjana kod sambungan...';
+                    statusEl.style.color = '#38bdf8';
+                }
+
+                hostPeer = new Peer(peerIceConfig);
 
                 hostPeer.on('open', (id) => {
-                    const remoteUrl = window.location.origin + window.location.pathname.replace('presentation.html', 'remote.html') + '?id=' + id;
+                    const baseUrl = window.location.href.split('?')[0].replace('presentation.html', 'remote.html');
+                    const remoteUrl = baseUrl + '?id=' + id;
                     const qrBox = document.getElementById('qrcodeBox');
-                    qrBox.innerHTML = '';
-                    new QRCode(qrBox, {
-                        text: remoteUrl,
-                        width: 180,
-                        height: 180,
-                        colorDark: "#040b17",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-                    statusEl.innerHTML = '<span style="color:#34d399;">● Sedia Diimbas</span> · ID: ' + id.substring(0, 8);
+                    if (qrBox) {
+                        qrBox.innerHTML = '';
+                        new QRCode(qrBox, {
+                            text: remoteUrl,
+                            width: 170,
+                            height: 170,
+                            colorDark: '#040b17',
+                            colorLight: '#ffffff',
+                            correctLevel: QRCode.CorrectLevel.M
+                        });
+                    }
+                    if (statusEl) {
+                        statusEl.innerHTML = '<span style="color:#34d399;font-weight:700;">● Sedia Diimbas</span><br><span style="font-size:0.7rem;color:#94a3b8;">ID Bilik: <b style="color:#fde68a;">' + id + '</b></span>';
+                    }
                     qrGenerated = true;
                 });
 
                 hostPeer.on('connection', (conn) => {
-                    statusEl.innerHTML = '<span style="color:#34d399;font-weight:800;">🎉 Telefon Tersambung!</span>';
-                    
+                    activeConn = conn;
+                    if (statusEl) {
+                        statusEl.innerHTML = '<span style="color:#34d399;font-weight:800;font-size:0.95rem;">🎉 Telefon Tersambung!</span><br><span style="font-size:0.72rem;color:#cbd5e1;">Alat kawalan jauh telefon kini aktif.</span>';
+                    }
+
+                    conn.on('open', () => {
+                        conn.send({
+                            action: 'connected',
+                            slide: (typeof cur === 'number') ? cur : 0
+                        });
+                    });
+
                     conn.on('data', (data) => {
                         handleRemoteCommand(data);
                     });
 
                     conn.on('close', () => {
-                        statusEl.innerHTML = '<span style="color:#f87171;">Sambungan telefon terputus</span>';
+                        activeConn = null;
+                        if (statusEl) {
+                            statusEl.innerHTML = '<span style="color:#f87171;font-weight:700;">⚠️ Sambungan telefon terputus.</span><br><span style="font-size:0.7rem;color:#94a3b8;">Imbas semula atau tekan Sambung Semula di telefon.</span>';
+                        }
+                    });
+
+                    conn.on('error', (err) => {
+                        console.error('Peer connection error:', err);
                     });
                 });
 
                 hostPeer.on('error', (err) => {
-                    statusEl.innerHTML = '<span style="color:#f87171;">Ralat: ' + err.type + '</span>';
+                    console.error('PeerJS host error:', err);
+                    if (statusEl) {
+                        statusEl.innerHTML = '<span style="color:#f87171;">⚠️ Ralat sambungan (' + err.type + '). Sila muat semula.</span>';
+                    }
                 });
             } catch (e) {
-                statusEl.innerHTML = '<span style="color:#f87171;">Gagal memuatkan sistem remote</span>';
+                console.error('Init peer failed:', e);
+                if (statusEl) {
+                    statusEl.innerHTML = '<span style="color:#f87171;">Gagal memuatkan sistem remote.</span>';
+                }
             }
         }
 
         function handleRemoteCommand(data) {
             if (!data || !data.action) return;
 
+            // Transition from hero/lang screen if necessary
+            if (data.action === 'next' || data.action === 'prev' || data.action === 'goto') {
+                const hero = document.getElementById('hero-screen');
+                const langSc = document.getElementById('lang-screen');
+                if (hero && hero.style.display !== 'none') hero.style.display = 'none';
+                if (langSc && langSc.style.display !== 'none') langSc.style.display = 'none';
+                const mm = document.getElementById('main-menu');
+                if (mm && mm.classList.contains('show')) mm.classList.remove('show');
+            }
+
             if (data.action === 'next') {
-                if (typeof next === 'function') next();
-                if (typeof cur !== 'undefined' && typeof gotoSlide === 'function') {
-                    gotoSlide(cur + 1);
+                if (typeof cur !== 'undefined' && typeof cards !== 'undefined' && cards.length > 0 && typeof gotoSlide === 'function') {
+                    gotoSlide((cur + 1) % cards.length);
+                } else if (typeof next === 'function') {
+                    next();
                 }
             } else if (data.action === 'prev') {
-                if (typeof prev === 'function') prev();
-                if (typeof cur !== 'undefined' && typeof gotoSlide === 'function') {
-                    gotoSlide(cur - 1);
+                if (typeof cur !== 'undefined' && typeof cards !== 'undefined' && cards.length > 0 && typeof gotoSlide === 'function') {
+                    gotoSlide((cur - 1 + cards.length) % cards.length);
+                } else if (typeof prev === 'function') {
+                    prev();
                 }
             } else if (data.action === 'goto' && typeof data.slide === 'number') {
-                if (typeof showLangScreen === 'function') {
-                    const hero = document.getElementById('hero-screen');
-                    const langSc = document.getElementById('lang-screen');
-                    if (hero) hero.style.display = 'none';
-                    if (langSc) langSc.style.display = 'none';
-                    const mm = document.getElementById('main-menu');
-                    if (mm) mm.style.display = 'flex';
-                }
                 if (typeof gotoSlide === 'function') {
                     gotoSlide(data.slide);
                 }
@@ -1585,9 +1490,6 @@ if(Math.abs(dx)>70&&Math.abs(dy)<45){gotoSlide((cur+(dx<0?1:-1)+cards.length)%ca
                 if (typeof showLangScreen === 'function') showLangScreen();
             }
         }
-</script>
-</body>
-</html>
-</script>
+    </script>
 </body>
 </html>

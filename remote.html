@@ -11,7 +11,7 @@
     <style>
         body {
             background-color: #040b17;
-            background-image: radial-gradient(circle at 50% 20%, rgba(220, 38, 38, 0.2) 0%, transparent 60%);
+            background-image: radial-gradient(circle at 50% 20%, rgba(220, 38, 38, 0.22) 0%, transparent 60%);
             font-family: 'Plus Jakarta Sans', sans-serif;
             touch-action: manipulation;
         }
@@ -22,24 +22,38 @@
 </head>
 <body class="text-white min-h-screen flex flex-col justify-between p-4 selection:bg-red-600">
 
-    <!-- Header Status -->
+    <!-- Header Status with Disconnect Button -->
     <header class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center font-bold text-white shadow-lg">
+            <div id="iconStatus" class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm shadow-lg">
                 <i class="fa-solid fa-gamepad"></i>
             </div>
             <div>
-                <h1 class="text-xs font-black tracking-wider uppercase">BFRD Remote Clicker</h1>
+                <h1 class="text-xs font-black tracking-wider uppercase text-slate-100">BFRD Remote Clicker</h1>
                 <p id="statusTxt" class="text-[10px] text-amber-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Menyambung ke skrin...
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Menyambung ke skrin komputer...
                 </p>
             </div>
         </div>
-        <a href="presentation.html" class="text-[10px] text-slate-400 border border-slate-700 px-2.5 py-1 rounded-lg">Buka Slaid</a>
+
+        <!-- Disconnect / Reconnect Button -->
+        <button id="btnDisconnect" onclick="handleDisconnectClick()" class="text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md">
+            <i class="fa-solid fa-power-off text-[11px] text-red-400"></i>
+            <span id="btnDisconnectText">Putuskan (Disconnect)</span>
+        </button>
     </header>
 
+    <!-- Manual Room ID Box (if camera did not scan ID or for fallback) -->
+    <div id="manualIdCard" class="hidden my-3 p-3 rounded-2xl bg-slate-900/90 border border-amber-500/30 text-center shadow-lg">
+        <div class="text-[11px] font-bold text-amber-300 mb-1.5"><i class="fa-solid fa-key mr-1"></i> Masukkan Kod ID Komputer:</div>
+        <div class="flex gap-2">
+            <input type="text" id="manualIdInput" placeholder="Contoh kod ID bilik..." class="flex-1 px-3 py-1.5 text-xs rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400">
+            <button onclick="connectWithManualId()" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl">Sambung</button>
+        </div>
+    </div>
+
     <!-- Main Controller Pad -->
-    <main class="my-auto space-y-6 py-4">
+    <main class="my-auto space-y-5 py-4">
         <!-- Big Navigation Buttons -->
         <div class="grid grid-cols-2 gap-4">
             <button onclick="sendCommand({action: 'prev'})" class="btn-ctrl bg-slate-800/90 active:bg-slate-700 border-2 border-slate-700 py-8 rounded-3xl flex flex-col items-center justify-center gap-2 shadow-xl">
@@ -67,7 +81,7 @@
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lompat Ke Modul Tertentu:</div>
             <div class="grid grid-cols-2 gap-2 text-xs">
                 <button onclick="sendCommand({action: 'goto', slide: 0})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">1. Visi & Misi</button>
-                <button onclick="sendCommand({action: 'goto', slide: 1})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">2. Tanggungjawab</button>
+                <button onclick="sendCommand({action: 'goto', slide: 1})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">2. Operasi Menyelamat</button>
                 <button onclick="sendCommand({action: 'goto', slide: 2})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">3. Khidmat Khas</button>
                 <button onclick="sendCommand({action: 'goto', slide: 3})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">4. Kerja Bukan Cemas</button>
                 <button onclick="sendCommand({action: 'goto', slide: 4})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">5. Cara Memohon</button>
@@ -87,43 +101,138 @@
         <button onclick="sendCommand({action: 'home'})" class="btn-ctrl px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold border border-slate-700">
             <i class="fa-solid fa-house mr-1"></i> Ke Muka Depan
         </button>
-        <span class="text-[10px] text-slate-500">Jabatan Bomba & Penyelamat Brunei</span>
+        <a href="presentation.html" class="text-[10px] text-slate-400 hover:text-white underline">Buka Slaid Penuh</a>
     </footer>
 
-    <!-- PeerJS Connection Logic -->
+    <!-- PeerJS Rock-Solid Connection Logic with STUN Server & Fallback -->
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const hostPeerId = urlParams.get('id');
+        let currentTargetId = urlParams.get('id');
+
         const statusTxt = document.getElementById('statusTxt');
+        const iconStatus = document.getElementById('iconStatus');
+        const btnDisconnect = document.getElementById('btnDisconnect');
+        const btnDisconnectText = document.getElementById('btnDisconnectText');
+        const manualIdCard = document.getElementById('manualIdCard');
+        const manualIdInput = document.getElementById('manualIdInput');
 
+        let peer = null;
         let conn = null;
+        let isConnected = false;
+        let connectTimeout = null;
 
-        if (!hostPeerId) {
-            statusTxt.className = "text-[10px] text-red-400 font-semibold";
-            statusTxt.innerHTML = "❌ Kod bilik tidak dijumpai. Sila imbas semula QR di komputer.";
-        } else {
-            const peer = new Peer();
+        const peerConfig = {
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' }
+                ]
+            }
+        };
+
+        function startConnection() {
+            if (!currentTargetId) {
+                statusTxt.className = "text-[10px] text-amber-400 font-semibold";
+                statusTxt.innerHTML = "⚠️ Kod bilik belum dimasukkan. Sila masukkan ID di bawah:";
+                manualIdCard.classList.remove('hidden');
+                btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 transition-all flex items-center gap-1.5 shadow-md";
+                btnDisconnectText.textContent = "Sambung (Connect)";
+                return;
+            }
+
+            manualIdCard.classList.add('hidden');
+            statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
+            statusTxt.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Menyambung ke skrin komputer...`;
+            iconStatus.className = "w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm shadow-lg";
+            btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md";
+            btnDisconnectText.textContent = "Putuskan (Disconnect)";
+
+            if (peer && !peer.destroyed) {
+                peer.destroy();
+            }
+
+            peer = new Peer(peerConfig);
 
             peer.on('open', (id) => {
-                statusTxt.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Menyambung ke skrin komputer...`;
-                conn = peer.connect(hostPeerId, { reliable: true });
-
-                conn.on('open', () => {
-                    statusTxt.className = "text-[10px] text-emerald-400 font-bold flex items-center gap-1.5";
-                    statusTxt.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Tersambung dengan Skrin Komputer!`;
-                    if (navigator.vibrate) navigator.vibrate(50);
-                });
-
-                conn.on('close', () => {
-                    statusTxt.className = "text-[10px] text-red-400 font-semibold";
-                    statusTxt.innerHTML = `⚠️ Terputus. Sila muat semula halaman.`;
-                });
+                attemptConnect();
             });
 
             peer.on('error', (err) => {
+                console.error("PeerJS client error:", err);
                 statusTxt.className = "text-[10px] text-red-400 font-semibold";
-                statusTxt.innerHTML = `Ralat sambungan: ` + err.type;
+                statusTxt.innerHTML = `⚠️ Ralat sambungan (${err.type}). Sila semak sambungan internet.`;
+                setDisconnectedUI();
             });
+        }
+
+        function attemptConnect() {
+            if (!peer || peer.destroyed) return;
+
+            conn = peer.connect(currentTargetId, {
+                reliable: true
+            });
+
+            // If connection takes longer than 8 seconds, inform user
+            clearTimeout(connectTimeout);
+            connectTimeout = setTimeout(() => {
+                if (!isConnected) {
+                    statusTxt.className = "text-[10px] text-amber-400 font-semibold";
+                    statusTxt.innerHTML = "⚠️ Sedang cuba menyambung... Pastikan modal QR di komputer masih dibuka.";
+                }
+            }, 8000);
+
+            conn.on('open', () => {
+                clearTimeout(connectTimeout);
+                isConnected = true;
+                statusTxt.className = "text-[10px] text-emerald-400 font-bold flex items-center gap-1.5";
+                statusTxt.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Tersambung dengan Skrin Komputer!`;
+                iconStatus.className = "w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-sm shadow-lg shadow-emerald-950";
+                btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/50 bg-red-950/60 hover:bg-red-900 text-red-200 transition-all flex items-center gap-1.5 shadow-md";
+                btnDisconnectText.textContent = "Putuskan (Disconnect)";
+                if (navigator.vibrate) navigator.vibrate(50);
+            });
+
+            conn.on('close', () => {
+                clearTimeout(connectTimeout);
+                setDisconnectedUI();
+            });
+
+            conn.on('error', (err) => {
+                clearTimeout(connectTimeout);
+                console.error("Connection error:", err);
+                setDisconnectedUI();
+            });
+        }
+
+        function setDisconnectedUI() {
+            isConnected = false;
+            statusTxt.className = "text-[10px] text-red-400 font-semibold flex items-center gap-1.5";
+            statusTxt.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Sambungan Terputus (Disconnected).`;
+            iconStatus.className = "w-9 h-9 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-bold text-sm shadow-lg";
+            btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 transition-all flex items-center gap-1.5 shadow-md";
+            btnDisconnectText.textContent = "Sambung Semula (Reconnect)";
+            manualIdCard.classList.remove('hidden');
+        }
+
+        function handleDisconnectClick() {
+            if (isConnected || (conn && conn.open) || (peer && !peer.destroyed && !isConnected)) {
+                // User clicked Disconnect
+                if (conn) conn.close();
+                if (peer) peer.destroy();
+                setDisconnectedUI();
+            } else {
+                // User clicked Reconnect
+                startConnection();
+            }
+        }
+
+        function connectWithManualId() {
+            const val = manualIdInput.value.trim();
+            if (val) {
+                currentTargetId = val;
+                startConnection();
+            }
         }
 
         function sendCommand(data) {
@@ -131,9 +240,12 @@
                 conn.send(data);
                 if (navigator.vibrate) navigator.vibrate(25);
             } else {
-                alert("Sambungan ke skrin belum aktif. Sila tunggu seketika.");
+                alert("Telefon belum tersambung ke komputer. Sila pastikan tetingkap QR di komputer masih terbuka atau tekan 'Sambung Semula'.");
             }
         }
+
+        // Auto start connection if id is present in URL
+        startConnection();
     </script>
 </body>
 </html>
