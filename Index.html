@@ -395,7 +395,7 @@
                                     <strong class="text-white">19 – 27</strong>
                                 </li>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-gray-400">Status:</span>
+                                    <span class="text-gray-400"><span class="lang-bm">Status:</span><span class="lang-en">Status:</span></span>
                                     <strong class="text-white"><span class="lang-bm">Belum Berkahwin</span><span class="lang-en">Unmarried</span></strong>
                                 </li>
                             </ul>
@@ -438,13 +438,13 @@
                                 </tr>
                                 <tr class="hover:bg-blue-900/20">
                                     <td class="px-6 py-4 font-bold text-white">2</td>
-                                    <td class="px-6 py-4 font-medium text-white">Push Up</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Tekan Tubi (Push Up)</span><span class="lang-en">Push-Up</span></td>
                                     <td class="px-6 py-4 text-amber-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
                                     <td class="px-6 py-4 text-pink-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
                                 </tr>
                                 <tr class="hover:bg-blue-900/20">
                                     <td class="px-6 py-4 font-bold text-white">3</td>
-                                    <td class="px-6 py-4 font-medium text-white">Sit Up</td>
+                                    <td class="px-6 py-4 font-medium text-white"><span class="lang-bm">Bangkit Tubi (Sit Up)</span><span class="lang-en">Sit-Up</span></td>
                                     <td class="px-6 py-4 text-amber-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
                                     <td class="px-6 py-4 text-pink-300 font-semibold"><span class="lang-bm">&gt; 30 (1 Minit)</span><span class="lang-en">&gt; 30 (1 minute)</span></td>
                                 </tr>
@@ -672,12 +672,12 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-1"><span class="lang-bm">Kelulusan Tertinggi & Akademik</span><span class="lang-en">Highest Academic Qualification</span></label>
                         <select id="calcEdu" onchange="toggleEduExtra()" class="w-full bg-blue-950 border border-blue-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-bombaGold">
-                            <option value="master">Master / Sarjana</option>
-                            <option value="degree">Ijazah Sarjana Muda (Degree)</option>
-                            <option value="hnd">Diploma Tertinggi Kebangsaan (HND)</option>
-                            <option value="hnc">Sijil Tertinggi Kebangsaan (HNC)</option>
-                            <option value="ond">Diploma Kebangsaan Peringkat Biasa (OND)</option>
-                            <option value="olevel">BC-GCE 'O' Level & BTEC Level 2</option>
+                            <option data-bm="Master / Sarjana" data-en="Master's Degree" value="master">Master / Sarjana</option>
+                            <option data-bm="Ijazah Sarjana Muda (Degree)" data-en="Bachelor's Degree" value="degree">Ijazah Sarjana Muda (Degree)</option>
+                            <option data-bm="Diploma Tertinggi Kebangsaan (HND)" data-en="Higher National Diploma (HND)" value="hnd">Diploma Tertinggi Kebangsaan (HND)</option>
+                            <option data-bm="Sijil Tertinggi Kebangsaan (HNC)" data-en="Higher National Certificate (HNC)" value="hnc">Sijil Tertinggi Kebangsaan (HNC)</option>
+                            <option data-bm="Diploma Kebangsaan Peringkat Biasa (OND)" data-en="Ordinary National Diploma (OND)" value="ond">Diploma Kebangsaan Peringkat Biasa (OND)</option>
+                            <option data-bm="BC-GCE 'O' Level & BTEC Level 2" data-en="BC-GCE 'O' Level & BTEC Level 2" value="olevel">BC-GCE 'O' Level & BTEC Level 2</option>
                         </select>
                     </div>
 
@@ -801,10 +801,10 @@
 
             let html = `<h4 class='font-bold text-lg mb-2 text-white'>${T('Keputusan Semakan Kelayakan:','Eligibility Check Results:')}</h4>`;
             html += `<div class='grid grid-cols-2 gap-2 text-xs bg-black/30 p-3 rounded-xl border border-blue-900/50 mb-3 text-left'>`;
-            html += `<div>• ${T('Ketinggian','Height')}: <strong class='text-white'>${heightCm} cm</strong> (${passedHeight ? '✅ Lulus' : '❌ Kurang min ' + minHeightCm + 'cm'})</div>`;
-            html += `<div>• BMI: <strong class='text-white'>${bmi.toFixed(2)}</strong> (${passedBmi ? '✅ 19-27' : '❌ ' + (bmi < 19 ? 'Terlalu Rendah' : 'Terlalu Tinggi')})</div>`;
+            html += `<div>• ${T('Ketinggian','Height')}: <strong class='text-white'>${heightCm} cm</strong> (${passedHeight ? T('✅ Lulus', '✅ Passed') : T('❌ Kurang min ' + minHeightCm + 'cm', '❌ Below min ' + minHeightCm + 'cm')})</div>`;
+            html += `<div>• BMI: <strong class='text-white'>${bmi.toFixed(2)}</strong> (${passedBmi ? T('✅ 19-27 (Ideal)', '✅ 19-27 (Ideal)') : '❌ ' + (bmi < 19 ? T('Terlalu Rendah', 'Too Low') : T('Terlalu Tinggi', 'Too High'))})</div>`;
             if (edu === 'olevel') {
-                html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>BC-GCE 'O' Level (${oCredits} Kredit)</strong></div>`;
+                html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>BC-GCE 'O' Level (${oCredits} ${T('Kredit', 'Credits')})</strong></div>`;
             } else if (majorInput) {
                 html += `<div class='col-span-2 border-t border-blue-900/50 pt-1'>• ${T('Kelulusan:','Qualification:')} <strong class='text-white'>${edu.toUpperCase()} (${majorInput})</strong></div>`;
             }
@@ -891,6 +891,29 @@
         let currentLang = 'bm';
         const T = (bm, en) => currentLang === 'en' ? en : bm;
         const TITLES = { bm: 'Portal Pengambilan Jabatan Bomba dan Penyelamat Brunei', en: 'Recruitment Portal - Brunei Fire and Rescue Department' };
+
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function openRank(src, alt) {
+            const modal = document.getElementById('rankModal');
+            const img = document.getElementById('rankModalImg');
+            const cap = document.getElementById('rankModalCap');
+            if (modal && img && cap) {
+                img.src = src;
+                img.alt = alt;
+                cap.textContent = alt;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeRank() {
+            const modal = document.getElementById('rankModal');
+            if (modal) modal.classList.add('hidden');
+        }
 
         function setLang(lang) {
             currentLang = lang;
