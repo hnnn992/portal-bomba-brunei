@@ -106,7 +106,7 @@
         <a href="presentation.html" class="text-[10px] text-slate-400 hover:text-white underline">Buka Slaid Penuh</a>
     </footer>
 
-    <!-- PeerJS Connection Logic (Zero Emojis, Bulletproof WebRTC) -->
+    <!-- PeerJS Connection Logic (All bugs fixed: intentionalDisconnect, auto-reconnect, delayed destroy) -->
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         let currentTargetId = urlParams.get('id');
@@ -123,6 +123,8 @@
         let conn = null;
         let isConnected = false;
         let connectTimeout = null;
+        let intentionalDisconnect = false; // flag to suppress false error UI on user-initiated disconnect
+        let autoReconnectTimer = null;
 
         const peerConfig = {
             config: {
@@ -135,9 +137,12 @@
         };
 
         function startConnection() {
+            clearTimeout(autoReconnectTimer);
+            intentionalDisconnect = false;
+
             if (!currentTargetId) {
                 statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
-                statusTxt.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-400"></i> Sila masukkan Kod ID Bilik di bawah:';
+                statusTxt.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Sila masukkan Kod ID Bilik di bawah:';
                 manualIdCard.classList.remove('hidden');
                 btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 transition-all flex items-center gap-1.5 shadow-md";
                 btnDisconnectIcon.className = "fa-solid fa-plug text-[11px] text-emerald-400";
@@ -145,7 +150,11 @@
                 return;
             }
 
-            manualIdCard.classList.add('hidden');
+            // Only show manual card if ID not already known
+            if (currentTargetId) {
+                manualIdCard.classList.add('hidden');
+            }
+
             statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
             statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span> Menyambung ke skrin komputer...';
             iconStatus.className = "w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm shadow-lg";
@@ -159,30 +168,29 @@
 
             peer = new Peer(peerConfig);
 
-            peer.on('open', (id) => {
+            peer.on('open', () => {
                 attemptConnect();
             });
 
             peer.on('error', (err) => {
+                if (intentionalDisconnect) return; // suppress error UI on user-initiated disconnect
                 console.error("PeerJS error:", err);
                 statusTxt.className = "text-[10px] text-red-400 font-semibold flex items-center gap-1.5";
-                statusTxt.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i> Ralat sambungan (' + err.type + '). Sila cuba lagi.';
-                setDisconnectedUI();
+                statusTxt.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Ralat sambungan (' + err.type + '). Sila cuba lagi.';
+                setDisconnectedUI(false);
             });
         }
 
         function attemptConnect() {
             if (!peer || peer.destroyed) return;
 
-            conn = peer.connect(currentTargetId, {
-                reliable: true
-            });
+            conn = peer.connect(currentTargetId, { reliable: true });
 
             clearTimeout(connectTimeout);
             connectTimeout = setTimeout(() => {
                 if (!isConnected) {
                     statusTxt.className = "text-[10px] text-amber-400 font-semibold flex items-center gap-1.5";
-                    statusTxt.innerHTML = '<i class="fa-solid fa-circle-info text-amber-400"></i> Masih menyambung... Pastikan tetingkap QR di komputer masih terbuka.';
+                    statusTxt.innerHTML = '<i class="fa-solid fa-circle-info"></i> Masih menyambung... Pastikan tetingkap QR di komputer masih terbuka.';
                 }
             }, 8000);
 
@@ -200,17 +208,31 @@
 
             conn.on('close', () => {
                 clearTimeout(connectTimeout);
-                setDisconnectedUI();
+                if (!intentionalDisconnect) {
+                    // Unexpected drop — show reconnecting state and auto-retry after 4 seconds
+                    setDisconnectedUI(false);
+                    statusTxt.innerHTML = '<i class="fa-solid fa-rotate"></i> Sambungan terputus. Cuba semula dalam 4 saat...';
+                    autoReconnectTimer = setTimeout(() => {
+                        if (!intentionalDisconnect && currentTargetId) {
+                            startConnection();
+                        }
+                    }, 4000);
+                } else {
+                    setDisconnectedUI(true);
+                }
             });
 
             conn.on('error', (err) => {
                 clearTimeout(connectTimeout);
-                console.error("Connection error:", err);
-                setDisconnectedUI();
+                if (!intentionalDisconnect) {
+                    console.error("Connection error:", err);
+                    setDisconnectedUI(false);
+                }
             });
         }
 
-        function setDisconnectedUI() {
+        // showManual: whether to show the manual ID card after disconnect
+        function setDisconnectedUI(showManual) {
             isConnected = false;
             statusTxt.className = "text-[10px] text-red-400 font-semibold flex items-center gap-1.5";
             statusTxt.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span> Sambungan Terputus (Disconnected).';
@@ -218,19 +240,31 @@
             btnDisconnect.className = "text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 transition-all flex items-center gap-1.5 shadow-md";
             btnDisconnectIcon.className = "fa-solid fa-plug text-[11px] text-emerald-400";
             btnDisconnectText.textContent = "Sambung Semula (Reconnect)";
-            manualIdCard.classList.remove('hidden');
+            // Only reveal manual ID input if ID is not already known from URL
+            if (showManual || !currentTargetId) {
+                manualIdCard.classList.remove('hidden');
+            }
         }
 
         function handleDisconnectClick() {
-            if (isConnected || (conn && conn.open) || (peer && !peer.destroyed && !isConnected)) {
-                // User clicked Disconnect
-                if (conn) {
-                    try { conn.close(); } catch(e) {}
-                }
-                if (peer) {
-                    try { peer.destroy(); } catch(e) {}
-                }
-                setDisconnectedUI();
+            if (isConnected || (conn && conn.open)) {
+                // User clicked Disconnect — set flag BEFORE closing to suppress error handler
+                intentionalDisconnect = true;
+                clearTimeout(autoReconnectTimer);
+                clearTimeout(connectTimeout);
+                if (conn) { try { conn.close(); } catch(e) {} }
+                // Delay peer.destroy() slightly so conn.close() signal can reach the host
+                setTimeout(() => {
+                    if (peer) { try { peer.destroy(); } catch(e) {} }
+                }, 150);
+                setDisconnectedUI(true);
+            } else if (peer && !peer.destroyed) {
+                // Mid-connecting — cancel and disconnect
+                intentionalDisconnect = true;
+                clearTimeout(autoReconnectTimer);
+                clearTimeout(connectTimeout);
+                if (peer) { try { peer.destroy(); } catch(e) {} }
+                setDisconnectedUI(true);
             } else {
                 // User clicked Reconnect
                 startConnection();
@@ -250,7 +284,15 @@
                 conn.send(data);
                 if (navigator.vibrate) navigator.vibrate(25);
             } else {
-                alert("Telefon belum tersambung ke komputer. Sila pastikan tetingkap QR di komputer masih terbuka atau tekan 'Sambung Semula'.");
+                // Flash a brief warning in the status bar instead of blocking alert
+                const prevHtml = statusTxt.innerHTML;
+                const prevClass = statusTxt.className;
+                statusTxt.className = "text-[10px] text-orange-400 font-semibold flex items-center gap-1.5";
+                statusTxt.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Belum tersambung. Tekan Sambung Semula.';
+                setTimeout(() => {
+                    statusTxt.className = prevClass;
+                    statusTxt.innerHTML = prevHtml;
+                }, 2500);
             }
         }
 

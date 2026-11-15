@@ -389,8 +389,6 @@ Object.defineProperty(PORTAL_CONFIG,'music',{get:function(){return media('music'
  #hero-screen video{object-fit:contain}
 }
 </style>
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -602,6 +600,7 @@ Object.defineProperty(PORTAL_CONFIG,'music',{get:function(){return media('music'
         const CFG = window.PORTAL_CONFIG || {};
 
         let currentLang = 'ms';
+        let idleTimer = null; // used by showLangScreen() to cancel any pending idle-reset timeout
 
         /* ---------- GLOBAL FOOTER: both languages on the gate, chosen language afterwards ---------- */
         function setGlobalFooter(mode) { // 'ms' | 'en' (also accepts 'both')
@@ -1373,7 +1372,7 @@ function toggleRemoteModal() {
   if (!modal) return;
   const isShown = modal.style.display === 'flex';
   modal.style.display = isShown ? 'none' : 'flex';
-  if (!isShown && (!hostPeer || hostPeer.destroyed)) {
+  if (!isShown && (hostPeer === null || hostPeer.destroyed)) {
     initHostPeer();
   }
 }
@@ -1428,14 +1427,14 @@ function initHostPeer() {
     });
 
     hostPeer.on('connection', (conn) => {
+      // Close any existing connection before accepting new one (prevents double commands)
+      if (activeConn && activeConn.open) {
+        try { activeConn.close(); } catch(e) {}
+      }
       activeConn = conn;
       if (statusEl) {
         statusEl.innerHTML = '<span style="color:#34d399;font-weight:700;font-size:14px;"><i class="fa-solid fa-circle-check"></i> Telefon Tersambung (Connected)</span><br><span style="font-size:11px;color:#cbd5e1;">Alat kawalan jauh telefon kini aktif.</span>';
       }
-
-      conn.on('open', () => {
-        conn.send({ action: 'connected', slide: cur });
-      });
 
       conn.on('data', (data) => {
         handleRemoteCommand(data);
@@ -1455,8 +1454,9 @@ function initHostPeer() {
 
     hostPeer.on('error', (err) => {
       console.error('PeerJS error:', err);
+      hostPeer = null; // null out so toggleRemoteModal() can re-init cleanly
       if (statusEl) {
-        statusEl.innerHTML = '<span style="color:#f87171;"><i class="fa-solid fa-circle-exclamation"></i> Ralat sambungan (' + err.type + '). Sila muat semula.</span>';
+        statusEl.innerHTML = '<span style="color:#f87171;"><i class="fa-solid fa-circle-exclamation"></i> Ralat sambungan (' + err.type + '). Sila tutup dan buka semula tetingkap QR.</span>';
       }
     });
   } catch (e) {
