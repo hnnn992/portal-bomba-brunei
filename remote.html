@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BFRD Remote Controller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bombaDark: '#040b17',
+                        bombaNavy: '#0a1d3f',
+                        bombaRed: '#dc2626',
+                        bombaGold: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #040b17;
+            background-image: radial-gradient(circle at 50% 20%, rgba(220, 38, 38, 0.15) 0%, transparent 60%);
+            touch-action: manipulation;
+        }
+        .touch-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col justify-between p-4 select-none">
+
+    <!-- Header Status -->
+    <header class="flex items-center justify-between py-2 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+            <span id="statusIndicator" class="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
+            <span id="statusText" class="text-xs font-bold text-amber-400">Menyambung ke skrin...</span>
+        </div>
+        <button onclick="toggleHaptic()" id="hapticBtn" class="text-xs text-slate-400 p-1.5 rounded-lg border border-slate-800">
+            <i class="fa-solid fa-mobile-screen-button"></i> Getaran: ON
+        </button>
+    </header>
+
+    <!-- Main Navigation Pad -->
+    <main class="my-auto space-y-6">
+        <!-- Big Next / Prev Trigger -->
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="sendCmd('prev')" class="touch-btn h-32 rounded-3xl bg-slate-900 border-2 border-slate-700 active:border-bombaGold text-white flex flex-col items-center justify-center gap-2 shadow-xl">
+                <i class="fa-solid fa-chevron-left text-3xl text-bombaGold"></i>
+                <span class="text-xs font-black uppercase tracking-wider text-slate-300">Sebelum</span>
+            </button>
+            <button onclick="sendCmd('next')" class="touch-btn h-32 rounded-3xl bg-gradient-to-br from-bombaRed to-red-800 border-2 border-red-500 text-white flex flex-col items-center justify-center gap-2 shadow-2xl">
+                <i class="fa-solid fa-chevron-right text-3xl text-white"></i>
+                <span class="text-xs font-black uppercase tracking-wider text-white">Seterusnya</span>
+            </button>
+        </div>
+
+        <!-- Quick Jump to 12 Modules -->
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
+                <span><i class="fa-solid fa-list-ul text-bombaGold mr-1"></i> Lompat ke Modul</span>
+                <span id="currentModuleText" class="text-bombaGold">Modul 1</span>
+            </div>
+            <select id="moduleSelect" onchange="sendSlide(this.value)" class="w-full bg-bombaDark border border-slate-700 rounded-xl px-3 py-3 text-xs font-bold text-white focus:outline-none focus:border-bombaGold">
+                <option value="0">1. Visi & Misi</option>
+                <option value="1">2. Tugas & Tanggungjawab</option>
+                <option value="2">3. Perkhidmatan Khas</option>
+                <option value="3">4. Kerja Khas (Bukan Kecemasan)</option>
+                <option value="4">5. Tatacara Memohon</option>
+                <option value="5">6. Syarat Kelayakan Am</option>
+                <option value="6">7. Kelayakan Jawatan (Pangkat)</option>
+                <option value="7">8. Syarat Kelayakan Fizikal</option>
+                <option value="8">9. Ujian Kecergasan (IPPT)</option>
+                <option value="9">10. Ujian Praktikal</option>
+                <option value="10">11. Kursus / Latihan</option>
+                <option value="11">12. Hubungi Kami</option>
+            </select>
+        </div>
+
+        <!-- Rank Inspection Quick Buttons -->
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-2">
+            <div class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-medal text-bombaGold mr-1"></i> Buka Kad Pangkat (Pop-up)
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="sendRank(0)" class="touch-btn py-2.5 rounded-xl text-[10px] font-bold bg-slate-800 active:bg-bombaRed text-slate-200 border border-slate-700">Penguasa Kanan</button>
+                <button onclick="sendRank(1)" class="touch-btn py-2.5 rounded-xl text-[10px] font-bold bg-slate-800 active:bg-bombaRed text-slate-200 border border-slate-700">Penguasa</button>
+                <button onclick="sendRank(2)" class="touch-btn py-2.5 rounded-xl text-[10px] font-bold bg-slate-800 active:bg-bombaRed text-slate-200 border border-slate-700">Penolong Penguasa</button>
+                <button onclick="sendRank(3)" class="touch-btn py-2.5 rounded-xl text-[10px] font-bold bg-slate-800 active:bg-bombaRed text-slate-200 border border-slate-700">Pegawai Balai</button>
+                <button onclick="sendRank(4)" class="touch-btn py-2.5 rounded-xl text-[10px] font-bold bg-slate-800 active:bg-bombaRed text-slate-200 border border-slate-700">Timbalan Balai</button>
+                <button onclick="sendRank(5)" class="touch-btn py-2.5 rounded-xl text-[10px] font-bold bg-amber-500/20 active:bg-amber-500 text-amber-300 border border-amber-500/40">Ahli Bomba</button>
+            </div>
+            <button onclick="sendCmd('closeRank')" class="w-full mt-2 py-2 rounded-xl text-xs font-bold bg-slate-800/80 text-slate-400 border border-slate-700">
+                <i class="fa-solid fa-xmark mr-1"></i> Tutup Pop-up Pangkat
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer Controls -->
+    <footer class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
+        <button onclick="sendCmd('lang')" class="touch-btn px-4 py-2 rounded-xl bg-slate-800 font-bold border border-slate-700 text-slate-200">
+            <i class="fa-solid fa-language text-bombaGold mr-1"></i> Tukar Bahasa
+        </button>
+        <button onclick="sendCmd('top')" class="touch-btn px-4 py-2 rounded-xl bg-slate-800 font-bold border border-slate-700 text-slate-200">
+            <i class="fa-solid fa-arrow-up mr-1"></i> Atas Sekali
+        </button>
+    </footer>
+
+    <script>
+        let peer = null;
+        let conn = null;
+        let haptic = true;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetPeerId = urlParams.get('id');
+
+        function toggleHaptic() {
+            haptic = !haptic;
+            document.getElementById('hapticBtn').innerHTML = `<i class="fa-solid fa-mobile-screen-button"></i> Getaran: ${haptic ? 'ON' : 'OFF'}`;
+        }
+
+        function triggerVibe() {
+            if (haptic && navigator.vibrate) {
+                navigator.vibrate(35);
+            }
+        }
+
+        function initRemote() {
+            if (!targetPeerId) {
+                document.getElementById('statusText').textContent = "Tiada Kod Skrin Pembentangan. Sila imbas QR semula.";
+                document.getElementById('statusIndicator').className = "w-3 h-3 rounded-full bg-red-500";
+                return;
+            }
+
+            peer = new Peer();
+
+            peer.on('open', (id) => {
+                conn = peer.connect(targetPeerId);
+                setupConn();
+            });
+
+            peer.on('error', (err) => {
+                console.error(err);
+                document.getElementById('statusText').textContent = "Ralat sambungan: " + err.type;
+                document.getElementById('statusIndicator').className = "w-3 h-3 rounded-full bg-red-500";
+            });
+        }
+
+        function setupConn() {
+            conn.on('open', () => {
+                document.getElementById('statusText').textContent = "Tersambung ke Skrin Pembentangan!";
+                document.getElementById('statusText').className = "text-xs font-bold text-emerald-400";
+                document.getElementById('statusIndicator').className = "w-3 h-3 rounded-full bg-emerald-500";
+                triggerVibe();
+            });
+
+            conn.on('data', (data) => {
+                if (data && typeof data.slideIndex === 'number') {
+                    document.getElementById('moduleSelect').value = data.slideIndex;
+                    document.getElementById('currentModuleText').textContent = `Modul ${data.slideIndex + 1}`;
+                }
+            });
+
+            conn.on('close', () => {
+                document.getElementById('statusText').textContent = "Terputus dari skrin pembentangan.";
+                document.getElementById('statusText').className = "text-xs font-bold text-red-400";
+                document.getElementById('statusIndicator').className = "w-3 h-3 rounded-full bg-red-500";
+            });
+        }
+
+        function sendCmd(action) {
+            triggerVibe();
+            if (conn && conn.open) {
+                conn.send({ action });
+            }
+        }
+
+        function sendSlide(index) {
+            triggerVibe();
+            if (conn && conn.open) {
+                conn.send({ action: 'goto', index: parseInt(index) });
+            }
+        }
+
+        function sendRank(rankIndex) {
+            triggerVibe();
+            if (conn && conn.open) {
+                conn.send({ action: 'openRank', rank: rankIndex });
+            }
+        }
+
+        window.onload = initRemote;
+    </script>
+</body>
+</html>
