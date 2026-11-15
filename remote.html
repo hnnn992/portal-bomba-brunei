@@ -70,10 +70,10 @@
 
         <!-- Language Switch on Screen -->
         <div class="grid grid-cols-2 gap-3 bg-slate-900/80 p-2 rounded-2xl border border-slate-800">
-            <button onclick="sendCommand({action: 'setLang', lang: 'ms'})" class="btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-slate-800 text-amber-300 border border-amber-500/30">
+            <button id="btnLangMs" onclick="handleLangClick('ms')" class="btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-amber-500/20 text-amber-300 border-2 border-amber-400 shadow-md transition-all">
                 Bahasa Melayu
             </button>
-            <button onclick="sendCommand({action: 'setLang', lang: 'en'})" class="btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-slate-800 text-sky-300 border border-sky-500/30">
+            <button id="btnLangEn" onclick="handleLangClick('en')" class="btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all">
                 English
             </button>
         </div>
@@ -186,6 +186,9 @@
                     if (typeof data.slide === 'number') {
                         setActiveSlideButton(data.slide);
                     }
+                    if (data.lang) {
+                        setLanguageUI(data.lang);
+                    }
                 } catch(e) {}
             };
 
@@ -293,6 +296,28 @@
         }
 
         
+        
+        let currentLanguage = 'ms';
+
+        function setLanguageUI(lang) {
+            currentLanguage = lang;
+            const btnMs = document.getElementById('btnLangMs');
+            const btnEn = document.getElementById('btnLangEn');
+            if (!btnMs || !btnEn) return;
+            if (lang === 'ms') {
+                btnMs.className = "btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-amber-500/20 text-amber-300 border-2 border-amber-400 shadow-md transition-all";
+                btnEn.className = "btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all";
+            } else {
+                btnEn.className = "btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-sky-500/20 text-sky-300 border-2 border-sky-400 shadow-md transition-all";
+                btnMs.className = "btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all";
+            }
+        }
+
+        function handleLangClick(lang) {
+            setLanguageUI(lang);
+            sendCommand({ action: 'setLang', lang: lang });
+        }
+
         let currentActiveSlide = 0;
 
         function setActiveSlideButton(slideIndex) {

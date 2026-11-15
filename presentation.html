@@ -759,19 +759,24 @@ Object.defineProperty(PORTAL_CONFIG,'music',{get:function(){return media('music'
     return h.split('@@LOGO@@').join('logo-bomba.png');
 }
 function openInteractiveSlides() {
+    clearTimeout(idleTimer);
     const overlay = document.getElementById('interactive-overlay');
     const frame = document.getElementById('interactive-frame');
     if (!frame.srcdoc) {
         frame.onload = function() {
             try {
-                frame.contentWindow.setLanguage(currentLang);
+                if (typeof frame.contentWindow.setLanguage === 'function') {
+                    frame.contentWindow.setLanguage(currentLang);
+                }
                 frame.contentWindow.focus();
             } catch(e) {}
         };
         frame.srcdoc = getSlidesHtml();
     } else {
         try {
-            frame.contentWindow.setLanguage(currentLang);
+            if (typeof frame.contentWindow.setLanguage === 'function' && frame.contentWindow.currentLang !== currentLang) {
+                frame.contentWindow.setLanguage(currentLang);
+            }
             frame.contentWindow.focus();
         } catch(e) {}
     }
@@ -790,6 +795,10 @@ function closeInteractiveSlides() {
                 closeInteractiveSlides();
             } else if (event.data === 'openInteractive') {
                 openInteractiveSlides();
+            } else if (event.data && event.data.type === 'setLanguage') {
+                currentLang = event.data.lang;
+                setGlobalFooter(currentLang);
+                applyMenuLanguage(currentLang);
             }
         });
 
@@ -1318,7 +1327,7 @@ function build(t){
 
 let cur=0,lang='ms',cards=[],btns=[];
 function setLanguage(l){
- lang=l;const t=I18N[l];document.documentElement.lang=l;
+ lang=l;window.currentLang=l;const t=I18N[l];document.documentElement.lang=l;
  document.getElementById('btn-ms').classList.toggle('active',l==='ms');
  document.getElementById('btn-en').classList.toggle('active',l==='en');
  document.querySelectorAll('[data-i18n]').forEach(e=>{if(t[e.dataset.i18n]!==undefined)e.innerHTML=t[e.dataset.i18n]});
@@ -1326,6 +1335,8 @@ function setLanguage(l){
  document.getElementById('stage').innerHTML=build(t).map(h=>`<div class="slide">${h}</div>`).join('');
  cards=document.querySelectorAll('.slide');btns=document.querySelectorAll('#nav button');
  gotoSlide(cur);if(mi>=0)openRank(mi);
+ if(typeof sendHostStatus==='function'){sendHostStatus();}
+ if(window.parent!==window){try{window.parent.postMessage({type:'setLanguage',lang:l},'*');}catch(e){}}
 }
 function gotoSlide(i){
  if(i<0||i>=cards.length)return;
@@ -1367,9 +1378,9 @@ st.addEventListener('touchend',function(e){if(mi>=0)return;var dx=e.changedTouch
 if(Math.abs(dx)>70&&Math.abs(dy)<45){gotoSlide((cur+(dx<0?1:-1)+cards.length)%cards.length)}},{passive:true});})();
 <\/script>
 <script>
-let mqttHostClient = null;
-let currentRoomId = null;
-let isHostConnected = false;
+var mqttHostClient = null;
+var currentRoomId = null;
+var isHostConnected = false;
 
 const BROKERS = [
   { host: "broker.hivemq.com", port: 8884, path: "/mqtt" },
@@ -1497,7 +1508,11 @@ function connectHostBroker() {
 function sendHostStatus() {
   if (mqttHostClient && mqttHostClient.isConnected() && currentRoomId) {
     try {
-      const msg = new Paho.MQTT.Message(JSON.stringify({ status: 'online', slide: (typeof cur === 'number') ? cur : 0 }));
+      const msg = new Paho.MQTT.Message(JSON.stringify({
+        status: 'online',
+        slide: (typeof cur === 'number') ? cur : 0,
+        lang: (typeof lang !== 'undefined') ? lang : 'ms'
+      }));
       msg.destinationName = "bfrd/room/" + currentRoomId + "/status";
       msg.qos = 1;
       mqttHostClient.send(msg);
@@ -1524,6 +1539,13 @@ function handleRemoteCommand(data) {
     return;
   }
 
+  if (data.action === 'setLang' && data.lang) {
+    if (typeof setLanguage === 'function') {
+      setLanguage(data.lang);
+    }
+    return;
+  }
+
   // If receiving module jump or next/prev, also ensure slides are open
   if (window.parent !== window) {
     window.parent.postMessage('openInteractive', '*');
@@ -1541,8 +1563,6 @@ function handleRemoteCommand(data) {
     if (typeof gotoSlide === 'function') {
       gotoSlide(data.slide);
     }
-  } else if (data.action === 'setLang' && data.lang) {
-    if (typeof setLanguage === 'function') setLanguage(data.lang);
   }
 }
 <\/script>
