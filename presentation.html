@@ -761,23 +761,35 @@ Object.defineProperty(PORTAL_CONFIG,'music',{get:function(){return media('music'
 function openInteractiveSlides() {
     const overlay = document.getElementById('interactive-overlay');
     const frame = document.getElementById('interactive-frame');
-    frame.onload=function(){try{frame.contentWindow.setLanguage(currentLang);frame.contentWindow.focus();}catch(e){}};
-    frame.srcdoc = getSlidesHtml();
+    if (!frame.srcdoc) {
+        frame.onload = function() {
+            try {
+                frame.contentWindow.setLanguage(currentLang);
+                frame.contentWindow.focus();
+            } catch(e) {}
+        };
+        frame.srcdoc = getSlidesHtml();
+    } else {
+        try {
+            frame.contentWindow.setLanguage(currentLang);
+            frame.contentWindow.focus();
+        } catch(e) {}
+    }
     overlay.style.display = 'block';
     document.getElementById('global-footer').style.display = 'none';
 }
 
 function closeInteractiveSlides() {
     const overlay = document.getElementById('interactive-overlay');
-    const frame = document.getElementById('interactive-frame');
     overlay.style.display = 'none';
-    frame.onload=null; frame.srcdoc = '';
     document.getElementById('global-footer').style.display = '';
 }
 
         window.addEventListener('message', function(event) {
             if (event.data === 'closeInteractive') {
                 closeInteractiveSlides();
+            } else if (event.data === 'openInteractive') {
+                openInteractiveSlides();
             }
         });
 
@@ -1495,6 +1507,28 @@ function sendHostStatus() {
 
 function handleRemoteCommand(data) {
   if (!data || !data.action) return;
+
+  if (data.action === 'openSlides') {
+    if (window.parent !== window) {
+      window.parent.postMessage('openInteractive', '*');
+    }
+    return;
+  }
+
+  if (data.action === 'home') {
+    if (window.parent !== window) {
+      window.parent.postMessage('closeInteractive', '*');
+    } else {
+      window.history.back();
+    }
+    return;
+  }
+
+  // If receiving module jump or next/prev, also ensure slides are open
+  if (window.parent !== window) {
+    window.parent.postMessage('openInteractive', '*');
+  }
+
   if (data.action === 'next') {
     if (typeof cur === 'number' && typeof cards !== 'undefined' && cards.length > 0) {
       gotoSlide((cur + 1) % cards.length);
@@ -1509,12 +1543,6 @@ function handleRemoteCommand(data) {
     }
   } else if (data.action === 'setLang' && data.lang) {
     if (typeof setLanguage === 'function') setLanguage(data.lang);
-  } else if (data.action === 'home') {
-    if (window.parent !== window) {
-      window.parent.postMessage('closeInteractive', '*');
-    } else {
-      window.history.back();
-    }
   }
 }
 <\/script>

@@ -98,12 +98,16 @@
         </div>
     </main>
 
-    <!-- Footer Controls -->
-    <footer class="pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
-        <button onclick="sendCommand({action: 'home'})" class="btn-ctrl px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold border border-slate-700">
-            <i class="fa-solid fa-house mr-1"></i> Ke Muka Depan
+    <!-- Footer Controls with Ke Muka Depan & Buka Slaid (View Slides) -->
+    <footer class="pt-3 border-t border-slate-800 flex justify-between items-center gap-2.5 text-xs">
+        <button onclick="sendCommand({action: 'home'})" class="btn-ctrl flex-1 py-2.5 rounded-xl bg-slate-800/90 active:bg-slate-700 text-slate-200 font-bold border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+            <i class="fa-solid fa-house text-amber-400"></i>
+            <span>Ke Muka Depan</span>
         </button>
-        <a href="presentation.html" class="text-[10px] text-slate-400 hover:text-white underline">Buka Slaid Penuh</a>
+        <button onclick="sendCommand({action: 'openSlides'})" class="btn-ctrl flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-red-600 active:from-red-800 active:to-red-700 text-white font-bold border border-amber-500/50 flex items-center justify-center gap-1.5 shadow-lg shadow-red-950/60 transition-all">
+            <i class="fa-solid fa-book-open text-amber-300"></i>
+            <span>Buka Slaid (View Slides)</span>
+        </button>
     </footer>
 
     <!-- Rock-Solid WebSocket Real-Time Connection Logic (Zero Emojis, Works on Any Network/4G/5G) -->
