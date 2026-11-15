@@ -82,18 +82,18 @@
         <div class="space-y-2">
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lompat Ke Modul Tertentu:</div>
             <div class="grid grid-cols-2 gap-2 text-xs">
-                <button onclick="sendCommand({action: 'goto', slide: 0})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">1. Visi & Misi</button>
-                <button onclick="sendCommand({action: 'goto', slide: 1})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">2. Operasi Menyelamat</button>
-                <button onclick="sendCommand({action: 'goto', slide: 2})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">3. Khidmat Khas</button>
-                <button onclick="sendCommand({action: 'goto', slide: 3})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">4. Kerja Bukan Cemas</button>
-                <button onclick="sendCommand({action: 'goto', slide: 4})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">5. Cara Memohon</button>
-                <button onclick="sendCommand({action: 'goto', slide: 5})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">6. Syarat Am</button>
-                <button onclick="sendCommand({action: 'goto', slide: 6})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-amber-500/40 text-left font-bold text-amber-300 truncate">7. Pangkat & Jawatan</button>
-                <button onclick="sendCommand({action: 'goto', slide: 7})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">8. Syarat Fizikal</button>
-                <button onclick="sendCommand({action: 'goto', slide: 8})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">9. IPPT Fizikal</button>
-                <button onclick="sendCommand({action: 'goto', slide: 9})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">10. Ujian Praktikal</button>
-                <button onclick="sendCommand({action: 'goto', slide: 10})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">11. Kursus & Latihan</button>
-                <button onclick="sendCommand({action: 'goto', slide: 11})" class="btn-ctrl p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">12. Hubungi Kami</button>
+                <button onclick="handleModuleClick(0)" data-slide="0" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">1. Visi & Misi</button>
+                <button onclick="handleModuleClick(1)" data-slide="1" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">2. Operasi Menyelamat</button>
+                <button onclick="handleModuleClick(2)" data-slide="2" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">3. Khidmat Khas</button>
+                <button onclick="handleModuleClick(3)" data-slide="3" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">4. Kerja Bukan Cemas</button>
+                <button onclick="handleModuleClick(4)" data-slide="4" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">5. Cara Memohon</button>
+                <button onclick="handleModuleClick(5)" data-slide="5" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">6. Syarat Am</button>
+                <button onclick="handleModuleClick(6)" data-slide="6" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">7. Pangkat & Jawatan</button>
+                <button onclick="handleModuleClick(7)" data-slide="7" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">8. Syarat Fizikal</button>
+                <button onclick="handleModuleClick(8)" data-slide="8" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">9. IPPT Fizikal</button>
+                <button onclick="handleModuleClick(9)" data-slide="9" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">10. Ujian Praktikal</button>
+                <button onclick="handleModuleClick(10)" data-slide="10" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">11. Kursus & Latihan</button>
+                <button onclick="handleModuleClick(11)" data-slide="11" class="btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate">12. Hubungi Kami</button>
             </div>
         </div>
     </main>
@@ -178,6 +178,9 @@
                     const data = JSON.parse(message.payloadString);
                     if (data.status === 'online' || data.status === 'ready') {
                         setConnectedUI();
+                    }
+                    if (typeof data.slide === 'number') {
+                        setActiveSlideButton(data.slide);
                     }
                 } catch(e) {}
             };
@@ -285,7 +288,29 @@
             }
         }
 
-        // Auto start connection if id is in URL
+        
+        let currentActiveSlide = 0;
+
+        function setActiveSlideButton(slideIndex) {
+            if (typeof slideIndex !== 'number') return;
+            currentActiveSlide = slideIndex;
+            const buttons = document.querySelectorAll('.module-btn');
+            buttons.forEach((btn, idx) => {
+                if (idx === slideIndex) {
+                    btn.className = "btn-ctrl module-btn p-2.5 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-left font-bold text-amber-300 truncate shadow-lg shadow-amber-950/50 transition-all";
+                } else {
+                    btn.className = "btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate transition-all";
+                }
+            });
+        }
+
+        function handleModuleClick(slideIndex) {
+            setActiveSlideButton(slideIndex);
+            sendCommand({ action: 'goto', slide: slideIndex });
+        }
+
+        // Highlight initial slide & auto start connection
+        setActiveSlideButton(0);
         startConnection();
     </script>
 </body>

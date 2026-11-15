@@ -1320,6 +1320,7 @@ function gotoSlide(i){
  cards.forEach(c=>c.classList.remove('active'));btns.forEach(b=>b.classList.remove('active'));
  cards[i].classList.add('active');btns[i].classList.add('active');
  btns[i].scrollIntoView({block:'nearest',inline:'center'});document.getElementById('stage').scrollTop=0;cur=i;
+ if(typeof sendHostStatus==='function'){sendHostStatus();}
 }
 let mi=-1;
 function openRank(i){
