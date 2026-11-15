@@ -961,6 +961,26 @@ function closeInteractiveSlides() {
                     closeInteractiveSlides();
                     return;
                 }
+                const frame = document.getElementById('interactive-frame');
+                if (frame && frame.contentWindow) {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                        e.preventDefault();
+                        try {
+                            if (typeof frame.contentWindow.gotoSlide === 'function') {
+                                frame.contentWindow.gotoSlide((frame.contentWindow.cur + 1) % frame.contentWindow.cards.length);
+                            }
+                        } catch(err) {}
+                        return;
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        try {
+                            if (typeof frame.contentWindow.gotoSlide === 'function') {
+                                frame.contentWindow.gotoSlide((frame.contentWindow.cur - 1 + frame.contentWindow.cards.length) % frame.contentWindow.cards.length);
+                            }
+                        } catch(err) {}
+                        return;
+                    }
+                }
             }
             if (viewer.classList.contains('open')) {
                 if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); next(); }
@@ -1357,14 +1377,14 @@ function closeRank(){mi=-1;document.getElementById('md').classList.remove('on');
 const BACK=[27,8,10009,461,4];
 document.addEventListener('keydown',e=>{
  if(mi>=0){
-  if(e.key==='ArrowRight'||e.key==='ArrowDown')openRank(mi+1);
-  else if(e.key==='ArrowLeft'||e.key==='ArrowUp')openRank(mi-1);
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key==='PageDown'||e.key===' ')openRank(mi+1);
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp')openRank(mi-1);
   else if(BACK.includes(e.keyCode)||e.key==='Escape'||e.key==='Backspace'||e.key==='Enter')closeRank();
   e.preventDefault();return;
  }
  if(e.key==='Enter'&&cur===6){openRank(0);return}
- if(e.key==='ArrowRight'||e.key==='ArrowDown')gotoSlide((cur+1)%cards.length);
- else if(e.key==='ArrowLeft'||e.key==='ArrowUp')gotoSlide((cur-1+cards.length)%cards.length);
+ if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key==='PageDown'||e.key===' ')gotoSlide((cur+1)%cards.length);
+ else if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp')gotoSlide((cur-1+cards.length)%cards.length);
  else if(e.key.toLowerCase()==='l')setLanguage(lang==='en'?'ms':'en');
  else if(BACK.includes(e.keyCode)||e.key==='Escape'||e.key==='Backspace'){
   if(window.parent!==window)window.parent.postMessage('closeInteractive','*');else window.history.back();
