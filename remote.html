@@ -78,6 +78,82 @@
             </button>
         </div>
 
+        <!-- Pangkat & Jawatan Quick Selector (Pop-up Perbesar) -->
+        <div id="rankSelectorCard" class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+                <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fa-solid fa-ranking-star"></i>
+                    <span id="txtRankHeader">Pilih Jawatan (Pop-up Perbesar):</span>
+                </div>
+                <button id="btnCloseRank" onclick="sendCommand({action: 'closeRank'})" class="hidden text-[10px] font-bold px-2.5 py-1 rounded-lg bg-red-950/80 border border-red-500/50 text-red-300 hover:bg-red-900 flex items-center gap-1 transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                    <span id="txtCloseRank">Tutup Pop-up</span>
+                </button>
+            </div>
+
+            <!-- 6 Jawatan Buttons Grid -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <button onclick="handleRankClick(0)" data-rank="0" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi II</span>
+                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                    </div>
+                    <span class="truncate text-xs font-semibold rank-title">1. Penguasa Bomba</span>
+                </button>
+                <button onclick="handleRankClick(1)" data-rank="1" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi III</span>
+                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                    </div>
+                    <span class="truncate text-xs font-semibold rank-title">2. Tim. Penguasa</span>
+                </button>
+                <button onclick="handleRankClick(2)" data-rank="2" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi III</span>
+                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                    </div>
+                    <span class="truncate text-xs font-semibold rank-title">3. Pen. Penguasa</span>
+                </button>
+                <button onclick="handleRankClick(3)" data-rank="3" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi IV</span>
+                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                    </div>
+                    <span class="truncate text-xs font-semibold rank-title">4. Pegawai Balai</span>
+                </button>
+                <button onclick="handleRankClick(4)" data-rank="4" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi IV</span>
+                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                    </div>
+                    <span class="truncate text-xs font-semibold rank-title">5. Tim. Peg. Balai</span>
+                </button>
+                <button onclick="handleRankClick(5)" data-rank="5" class="btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] uppercase tracking-wide text-amber-400 font-extrabold">Divisi V</span>
+                        <i class="fa-solid fa-expand text-[10px] text-slate-400"></i>
+                    </div>
+                    <span class="truncate text-xs font-semibold rank-title">6. Ahli Bomba</span>
+                </button>
+            </div>
+
+            <!-- Rank Sub Navigation Buttons -->
+            <div id="rankNavControls" class="grid grid-cols-3 gap-2 pt-1">
+                <button onclick="sendCommand({action: 'prevRank'})" class="btn-ctrl py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] border border-slate-700 flex items-center justify-center gap-1 shadow">
+                    <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                    <span id="txtPrevRank">Sebelum</span>
+                </button>
+                <button onclick="sendCommand({action: 'closeRank'})" class="btn-ctrl py-1.5 rounded-xl bg-red-950/60 hover:bg-red-900/80 text-red-200 font-bold text-[11px] border border-red-500/40 flex items-center justify-center gap-1 shadow">
+                    <i class="fa-solid fa-xmark text-[10px]"></i>
+                    <span id="txtCloseRankBtn">Tutup Pop-up</span>
+                </button>
+                <button onclick="sendCommand({action: 'nextRank'})" class="btn-ctrl py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] border border-slate-700 flex items-center justify-center gap-1 shadow">
+                    <span id="txtNextRank">Berikut</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- Direct 12 Modules Jumper (Completely Free of Emojis) -->
         <div class="space-y-2">
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lompat Ke Modul Tertentu:</div>
@@ -189,6 +265,15 @@
                     if (data.lang) {
                         setLanguageUI(data.lang);
                     }
+                    if (typeof data.rank === 'number') {
+                        if (data.isModalOpen) {
+                            setActiveRankButton(data.rank);
+                        } else {
+                            setActiveRankButton(-1);
+                        }
+                    } else if (data.isModalOpen === false) {
+                        setActiveRankButton(-1);
+                    }
                 } catch(e) {}
             };
 
@@ -299,23 +384,122 @@
         
         let currentLanguage = 'ms';
 
+        const RANK_NAMES = {
+            ms: [
+                "1. Penguasa Bomba",
+                "2. Tim. Penguasa",
+                "3. Pen. Penguasa",
+                "4. Pegawai Balai",
+                "5. Tim. Peg. Balai",
+                "6. Ahli Bomba"
+            ],
+            en: [
+                "1. Superintendent",
+                "2. Deputy Supt.",
+                "3. Asst. Supt.",
+                "4. Station Officer",
+                "5. Deputy Station Off.",
+                "6. Firefighter"
+            ]
+        };
+
+        const MODULE_NAMES = {
+            ms: [
+                "1. Visi & Misi", "2. Operasi Menyelamat", "3. Khidmat Khas", "4. Kerja Bukan Cemas",
+                "5. Cara Memohon", "6. Syarat Am", "7. Pangkat & Jawatan", "8. Syarat Fizikal",
+                "9. IPPT Fizikal", "10. Ujian Praktikal", "11. Kursus & Latihan", "12. Hubungi Kami"
+            ],
+            en: [
+                "1. Vision & Mission", "2. Rescue Operations", "3. Special Services", "4. Non-Emergency",
+                "5. How to Apply", "6. General Req.", "7. Ranks & Positions", "8. Physical Req.",
+                "9. Fitness (IPPT)", "10. Practical Test", "11. Courses & Training", "12. Contact Us"
+            ]
+        };
+
         function setLanguageUI(lang) {
             currentLanguage = lang;
             const btnMs = document.getElementById('btnLangMs');
             const btnEn = document.getElementById('btnLangEn');
-            if (!btnMs || !btnEn) return;
-            if (lang === 'ms') {
-                btnMs.className = "btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-amber-500/20 text-amber-300 border-2 border-amber-400 shadow-md transition-all";
-                btnEn.className = "btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all";
-            } else {
-                btnEn.className = "btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-sky-500/20 text-sky-300 border-2 border-sky-400 shadow-md transition-all";
-                btnMs.className = "btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all";
+            if (btnMs && btnEn) {
+                if (lang === 'ms') {
+                    btnMs.className = "btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-amber-500/20 text-amber-300 border-2 border-amber-400 shadow-md transition-all";
+                    btnEn.className = "btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all";
+                } else {
+                    btnEn.className = "btn-ctrl py-2.5 rounded-xl font-bold text-xs bg-sky-500/20 text-sky-300 border-2 border-sky-400 shadow-md transition-all";
+                    btnMs.className = "btn-ctrl py-2.5 rounded-xl font-semibold text-xs bg-slate-800 text-slate-400 border border-slate-700 transition-all";
+                }
             }
+
+            // Update rank titles
+            const titles = RANK_NAMES[lang] || RANK_NAMES.ms;
+            document.querySelectorAll('.rank-title').forEach((el, idx) => {
+                if (titles[idx]) el.textContent = titles[idx];
+            });
+
+            // Update rank header and buttons text
+            const txtRankHeader = document.getElementById('txtRankHeader');
+            if (txtRankHeader) txtRankHeader.textContent = (lang === 'en') ? 'Choose Position (Enlarge Pop-up):' : 'Pilih Jawatan (Pop-up Perbesar):';
+            const txtCloseRank = document.getElementById('txtCloseRank');
+            if (txtCloseRank) txtCloseRank.textContent = (lang === 'en') ? 'Close Pop-up' : 'Tutup Pop-up';
+            const txtCloseRankBtn = document.getElementById('txtCloseRankBtn');
+            if (txtCloseRankBtn) txtCloseRankBtn.textContent = (lang === 'en') ? 'Close Pop-up' : 'Tutup Pop-up';
+            const txtPrevRank = document.getElementById('txtPrevRank');
+            if (txtPrevRank) txtPrevRank.textContent = (lang === 'en') ? 'Prev' : 'Sebelum';
+            const txtNextRank = document.getElementById('txtNextRank');
+            if (txtNextRank) txtNextRank.textContent = (lang === 'en') ? 'Next' : 'Berikut';
+
+            // Update module button titles
+            const modTitles = MODULE_NAMES[lang] || MODULE_NAMES.ms;
+            document.querySelectorAll('.module-btn').forEach((btn, idx) => {
+                if (modTitles[idx]) btn.textContent = modTitles[idx];
+            });
         }
 
         function handleLangClick(lang) {
             setLanguageUI(lang);
             sendCommand({ action: 'setLang', lang: lang });
+        }
+
+                let currentActiveRank = -1;
+
+        function handleRankClick(rankIndex) {
+            setActiveRankButton(rankIndex);
+            setActiveSlideButton(6);
+            sendCommand({ action: 'openRank', rank: rankIndex });
+        }
+
+        function setActiveRankButton(rankIndex) {
+            currentActiveRank = rankIndex;
+            const rankButtons = document.querySelectorAll('.rank-btn');
+            const closeBtn = document.getElementById('btnCloseRank');
+            const rankCard = document.getElementById('rankSelectorCard');
+
+            rankButtons.forEach((btn) => {
+                const btnRank = parseInt(btn.getAttribute('data-rank'), 10);
+                if (btnRank === rankIndex) {
+                    btn.className = "btn-ctrl rank-btn p-2.5 rounded-xl bg-amber-500/25 border-2 border-amber-400 text-amber-200 shadow-lg shadow-amber-950/50 flex flex-col gap-0.5 transition-all scale-[1.02]";
+                } else {
+                    btn.className = "btn-ctrl rank-btn p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-left font-bold text-slate-200 transition-all flex flex-col gap-0.5 shadow";
+                }
+            });
+
+            if (closeBtn) {
+                if (rankIndex >= 0) {
+                    closeBtn.classList.remove('hidden');
+                } else {
+                    closeBtn.classList.add('hidden');
+                }
+            }
+
+            if (rankCard) {
+                if (rankIndex >= 0) {
+                    rankCard.classList.add('border-amber-500/60', 'ring-1', 'ring-amber-500/40');
+                    rankCard.classList.remove('border-slate-800');
+                } else {
+                    rankCard.classList.remove('border-amber-500/60', 'ring-1', 'ring-amber-500/40');
+                    rankCard.classList.add('border-slate-800');
+                }
+            }
         }
 
         let currentActiveSlide = 0;
@@ -331,6 +515,18 @@
                     btn.className = "btn-ctrl module-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-left font-semibold text-slate-200 truncate transition-all";
                 }
             });
+
+            // If on slide 6 (7. Pangkat & Jawatan), highlight rank selector card
+            const rankCard = document.getElementById('rankSelectorCard');
+            if (rankCard && currentActiveRank < 0) {
+                if (slideIndex === 6) {
+                    rankCard.classList.add('border-amber-500/40');
+                    rankCard.classList.remove('border-slate-800');
+                } else {
+                    rankCard.classList.remove('border-amber-500/40');
+                    rankCard.classList.add('border-slate-800');
+                }
+            }
         }
 
         function handleModuleClick(slideIndex) {
