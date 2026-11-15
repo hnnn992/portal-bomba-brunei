@@ -5,20 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Pengambilan Jabatan Bomba dan Penyelamat Brunei</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        bombaBlue: '#0B1E3F',
-                        bombaRed: '#D32F2F',
-                        bombaGold: '#FFC107',
-                        bombaDark: '#071022'
+                        bombaBlue: '#0b1d3f',
+                        bombaRed: '#dc2626',
+                        bombaGold: '#f59e0b',
+                        bombaDark: '#040b17'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif']
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'glow-red': '0 0 35px -5px rgba(220, 38, 38, 0.45)',
+                        'glow-gold': '0 0 30px -5px rgba(245, 158, 11, 0.4)'
                     }
                 }
             }
@@ -27,6 +31,80 @@
     <style>
         html[data-lang="bm"] .lang-en { display: none !important; }
         html[data-lang="en"] .lang-bm { display: none !important; }
+
+        /* Premium Modern Ambient Mesh Background */
+        body {
+            background-color: #040b17 !important;
+            background-image: 
+                radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.16) 0%, transparent 40%),
+                radial-gradient(circle at 88% 12%, rgba(245, 158, 11, 0.12) 0%, transparent 35%),
+                radial-gradient(circle at 50% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Glassmorphism Card Refinement */
+        .bg-bombaBlue\/60, .bg-bombaBlue\/40, .bg-bombaDark\/60 {
+            background: linear-gradient(135deg, rgba(11, 29, 63, 0.72) 0%, rgba(4, 11, 23, 0.88) 100%) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-color: rgba(56, 189, 248, 0.18) !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Smooth Card Hover Elevation & Glow */
+        .grid > div.bg-bombaDark\/60:hover, 
+        .grid > div.bg-bombaBlue\/60:hover {
+            border-color: rgba(245, 158, 11, 0.5) !important;
+            box-shadow: 0 14px 40px -10px rgba(220, 38, 38, 0.35) !important;
+            transform: translateY(-3px);
+        }
+
+        /* Hero Spotlight Glow */
+        #tab-overview .rounded-3xl.overflow-hidden {
+            background: linear-gradient(135deg, rgba(8, 20, 46, 0.85) 0%, rgba(11, 29, 63, 0.9) 50%, rgba(4, 11, 23, 0.95) 100%) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.25) !important;
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(220, 38, 38, 0.25) !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #040b17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
+
+        /* Interactive table hover smooth */
+        table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+        table tbody tr:hover {
+            background-color: rgba(30, 58, 138, 0.35) !important;
+        }
+
+        /* Input glow on focus */
+        input:focus, select:focus {
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5) !important;
+            border-color: #f59e0b !important;
+        }
+
+        /* Smooth button transitions */
+        button, a {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        button:active, a:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body class="bg-bombaDark text-gray-100 font-sans min-h-screen flex flex-col selection:bg-bombaRed selection:text-white">
