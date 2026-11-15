@@ -477,13 +477,15 @@ Object.defineProperty(PORTAL_CONFIG,'music',{get:function(){return media('music'
 
     <!-- MAIN MENU -->
     <div id="main-menu">
-        <!-- Floating Controls: Remote QR & Back to Opening -->
-    <div style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:99999;display:inline-flex;align-items:center;gap:0.5rem;">
-        <button type="button" onclick="toggleRemoteModal()" style="font-size:0.75rem;font-weight:700;padding:0.4rem 0.75rem;border-radius:9999px;background:rgba(220,38,38,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(245,158,11,0.5);box-shadow:0 4px 15px rgba(0,0,0,0.4);cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem;transition:all 0.2s ease;">
-            <i class="fa-solid fa-mobile-screen"></i><span>Phone Remote</span>
-        </button>
-        <!-- Phone Remote Trigger Button -->
-        <button type="button" id="btn-remote-qr" onclick="toggleRemoteModal()" style="position:fixed;bottom:3.5rem;right:1.25rem;z-index:99999;font-size:0.75rem;font-weight:700;padding:0.4rem 0.75rem;border-radius:9999px;background:rgba(220,38,38,0.9);color:#ffffff;border:1px solid rgba(245,158,11,0.5);box-shadow:0 4px 15px rgba(220,38,38,0.4);cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);"><i class="fa-solid fa-mobile-screen-button"></i><span>Kawalan Telefon (Remote)</span></button>
+        <!-- Floating Bottom-Right Action Buttons -->
+        <div style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:99999;display:inline-flex;align-items:center;gap:0.5rem;">
+            <button type="button" onclick="toggleRemoteModal()" style="font-size:0.75rem;font-weight:700;padding:0.4rem 0.75rem;border-radius:9999px;background:rgba(220,38,38,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(245,158,11,0.5);box-shadow:0 4px 15px rgba(0,0,0,0.4);cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem;transition:all 0.2s ease;">
+                <i class="fa-solid fa-mobile-screen"></i><span>Phone Remote</span>
+            </button>
+            <a href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;font-weight:700;padding:0.4rem 0.75rem;border-radius:9999px;background:rgba(15,34,73,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fde68a;border:1px solid rgba(245,158,11,0.45);box-shadow:0 4px 15px rgba(0,0,0,0.4);transition:all 0.2s ease;">
+                <i class="fa-solid fa-arrow-left" style="font-size:0.65rem;"></i><span>Back to Opening</span>
+            </a>
+        </div>
 
         <!-- Remote Pairing QR Modal -->
         <div id="remoteModal" style="display:none;position:fixed;inset:0;z-index:100000;background:rgba(4,11,23,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1.5rem;" onclick="if(event.target===this)toggleRemoteModal()">
@@ -501,7 +503,6 @@ Object.defineProperty(PORTAL_CONFIG,'music',{get:function(){return media('music'
             </div>
         </div>
 
-        <a href="index.html" class="btn-menu-pilihan" style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:99999;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;font-weight:700;padding:0.4rem 0.75rem;border-radius:9999px;background:rgba(15,34,73,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fde68a;border:1px solid rgba(245,158,11,0.45);box-shadow:0 4px 15px rgba(0,0,0,0.4);transition:all 0.2s ease;"><i class="fa-solid fa-arrow-left" style="font-size:0.65rem;"></i><span>Back to Opening</span></a>
         <button type="button" id="home-btn" class="btn btn-gold" onclick="showLangScreen()"><i class="fa-solid fa-house"></i><span id="txt-home">Bahasa</span></button>
         <div id="stage">
 
