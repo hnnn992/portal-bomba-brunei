@@ -136,7 +136,7 @@
                     <button id="lang-en" onclick="setLang('en')" class="px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all text-gray-300">EN</button>
                 </div>
                 <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all mr-2">
-                    <i class="fa-solid fa-arrow-left text-bombaGold"></i> <span class="lang-bm">Pilih Mod</span><span class="lang-en">Choose Mode</span>
+                    <i class="fa-solid fa-arrow-left text-bombaGold"></i> <span class="lang-bm">Back to Opening</span><span class="lang-en">Back to Opening</span>
                 </a>
                 <a href="presentation.html" class="hidden sm:inline-flex items-center gap-1.5 bg-red-950/70 hover:bg-red-900 border border-red-500/40 text-red-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all mr-2">
                     <i class="fa-solid fa-chalkboard-user text-bombaGold"></i> <span class="lang-bm">Mod Pembentangan</span><span class="lang-en">Presentation</span>
@@ -940,6 +940,7 @@
                 b.classList.toggle('text-gray-300', !on);
             });
             try { localStorage.setItem('bombaLang', lang); } catch (e) {}
+            if (typeof toggleEduExtra === 'function') toggleEduExtra();
             const rb = document.getElementById('calcResult');
             if (rb && !rb.classList.contains('hidden')) calculateEligibility();
         }
@@ -955,7 +956,7 @@
     <!-- Floating Bottom-Right Back to Mode Selection -->
     <a href="index.html" class="fixed bottom-5 right-5 z-50 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-slate-900/85 hover:bg-slate-800 text-bombaGoldLight border border-amber-500/40 shadow-xl backdrop-blur-md transition-all hover:scale-105">
         <i class="fa-solid fa-arrow-left text-[11px] text-bombaGold"></i>
-        <span class="lang-bm">Menu Pilihan</span><span class="lang-en">Choose Mode</span>
+        <span>Back to Opening</span>
     </a>
 </body>
 </html>
